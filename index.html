@@ -13,6 +13,17 @@
         font-family: Arial, sans-serif;
         cursor: crosshair;
       }
+
+      @keyframes fadeFloat {
+        0% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-50px) scale(1.1);
+        }
+      }
     </style>
   </head>
 
@@ -22,6 +33,64 @@
       document.addEventListener("click", (e) => {
         console.log("Click at:", e.clientX, e.clientY);
       });
+      let baseDamage = 10;
+      let clickHistory = []; // Store {timestamp, damage} </objects>
+
+      document.addEventListener("click", (e) => {
+        // Create damage number element
+        const damageEl = document.createElement("div");
+        damageEl.textContent = baseDamage;
+        damageEl.style.position = "absolute";
+        damageEl.style.left = e.clientX + "px";
+        damageEl.style.top = e.clientY + "px";
+        damageEl.style.color = "#ff6b6b";
+        damageEl.style.fontWeight = "bold";
+        damageEl.style.pointerEvents = "none";
+        damageEl.style.animation = "fadeFloat 1s ease-out forwards";
+
+        document.body.appendChild(damageEl);
+
+        // Remove element after animation completes
+        setTimeout(() => {
+          damageEl.remove();
+        }, 1000);
+
+        // Record click for DPS
+        clickHistory.push({
+          timestamp: performance.now(),
+          damage: baseDamage,
+        });
+      });
+
+      function calculateDPS() {
+        const now = performance.now();
+        const oneSecondAgo = now - 2000;
+
+        console.log("Click history length:", clickHistory.length); // DEBUG
+
+        // Keep only clicks from the last second
+        clickHistory = clickHistory.filter(
+          (click) => click.timestamp > oneSecondAgo,
+        );
+
+        // Keep only clicks from the last second
+        const recentDamage = clickHistory.reduce(
+          (sum, click) => sum + click.damage,
+          0,
+        );
+
+        console.log("Recent damage:", recentDamage); // DEBUG
+
+        // Update display
+        const dpsElement = document.getElementById("dps-display");
+        if (dpsElement) {
+          dpsElement.textContent = `DPS: ${recentDamage}`;
+        } else {
+          console.log("DPS element not found!"); // DEBUG
+        }
+      }
+      // Update DPS every 100ms for smooth updates
+      setInterval(calculateDPS, 100);
     </script>
   </body>
 </html>
