@@ -25,13 +25,6 @@
       }
 
       #dps-display {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        font-size: 24px;
-        font-weight: bold;
-        color: #4ecdc4;
-        text-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
         z-index: 1000;
       }
 
@@ -48,11 +41,11 @@
       @keyframes fadeFloat {
         0% {
           opacity: 1;
-          transform: translateY(0) scale(1);
+          transform: translate(0, 0) rotate(0deg);
         }
         100% {
           opacity: 0;
-          transform: translateY(-50px) scale(1.1);
+          transform: translate(var(--drift-x), var(--drift-y)) rotate(var(--rotation));
         }
       }
     </style>
@@ -75,6 +68,14 @@
         damageEl.style.color = "#ff6b6b";
         damageEl.style.fontWeight = "bold";
         damageEl.style.pointerEvents = "none";
+
+        // Randomize the float direction
+        const driftX = (Math.random() - 0.5) * 60; // -30px to +30px
+        const driftY = -30 - Math.random() * 40;   // -30px to -70px (always up)
+        const rotation = (Math.random() - 0.5) * 30; // -15deg to +15deg
+        damageEl.style.setProperty("--drift-x", driftX + "px");
+        damageEl.style.setProperty("--drift-y", driftY + "px");
+        damageEl.style.setProperty("--rotation", rotation + "deg");
         damageEl.style.animation = "fadeFloat 1s ease-out forwards";
 
         document.body.appendChild(damageEl);
