@@ -6,14 +6,22 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
     <title>ClickDPS</title>
     <style>
-      body {
+      html, body {
         margin: 0;
-        height: 100vh;
+        height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: manipulation;
+      }
+
+      body {
         background: #1a1a1a;
         color: white;
         font-family: Arial, sans-serif;
         cursor: crosshair;
         user-select: none;
+        position: fixed;
+        width: 100%;
       }
 
       #dps-display {
@@ -57,13 +65,13 @@
       let baseDamage = 10;
       let clickHistory = []; // Store {timestamp, damage}
 
-      document.addEventListener("click", (e) => {
+      function dealDamage(x, y) {
         // Create damage number element
         const damageEl = document.createElement("div");
         damageEl.textContent = baseDamage;
         damageEl.style.position = "absolute";
-        damageEl.style.left = e.clientX + "px";
-        damageEl.style.top = e.clientY + "px";
+        damageEl.style.left = x + "px";
+        damageEl.style.top = y + "px";
         damageEl.style.color = "#ff6b6b";
         damageEl.style.fontWeight = "bold";
         damageEl.style.pointerEvents = "none";
@@ -81,7 +89,20 @@
           timestamp: performance.now(),
           damage: baseDamage,
         });
+      }
+
+      // Handle mouse clicks
+      document.addEventListener("click", (e) => {
+        dealDamage(e.clientX, e.clientY);
       });
+
+      // Handle touch events for mobile
+      document.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        for (const touch of e.touches) {
+          dealDamage(touch.clientX, touch.clientY);
+        }
+      }, { passive: false });
 
       function calculateDPS() {
         const now = performance.now();
