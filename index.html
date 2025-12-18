@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
     <title>ClickDPS</title>
     <style>
       body {
@@ -12,6 +13,28 @@
         color: white;
         font-family: Arial, sans-serif;
         cursor: crosshair;
+        user-select: none;
+      }
+
+      #dps-display {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #4ecdc4;
+        text-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        z-index: 1000;
+      }
+
+      #instructions {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 14px;
+        color: #666;
+        text-align: center;
       }
 
       @keyframes fadeFloat {
@@ -29,12 +52,10 @@
 
   <body>
     <div id="dps-display">DPS: 0</div>
+    <div id="instructions">Click anywhere to deal damage</div>
     <script>
-      document.addEventListener("click", (e) => {
-        console.log("Click at:", e.clientX, e.clientY);
-      });
       let baseDamage = 10;
-      let clickHistory = []; // Store {timestamp, damage} </objects>
+      let clickHistory = []; // Store {timestamp, damage}
 
       document.addEventListener("click", (e) => {
         // Create damage number element
@@ -64,29 +85,23 @@
 
       function calculateDPS() {
         const now = performance.now();
-        const oneSecondAgo = now - 2000;
-
-        console.log("Click history length:", clickHistory.length); // DEBUG
+        const oneSecondAgo = now - 1000;
 
         // Keep only clicks from the last second
         clickHistory = clickHistory.filter(
           (click) => click.timestamp > oneSecondAgo,
         );
 
-        // Keep only clicks from the last second
+        // Calculate total damage in the last second
         const recentDamage = clickHistory.reduce(
           (sum, click) => sum + click.damage,
           0,
         );
 
-        console.log("Recent damage:", recentDamage); // DEBUG
-
         // Update display
         const dpsElement = document.getElementById("dps-display");
         if (dpsElement) {
           dpsElement.textContent = `DPS: ${recentDamage}`;
-        } else {
-          console.log("DPS element not found!"); // DEBUG
         }
       }
       // Update DPS every 100ms for smooth updates
