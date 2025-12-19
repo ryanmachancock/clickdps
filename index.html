@@ -126,14 +126,34 @@
         opacity: 1;
       }
 
-      #bar {
+      #bar-container {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
+        z-index: 200;
+      }
+
+      #bar-label {
+        position: absolute;
+        bottom: 6px;
+        left: 16px;
+        font-size: 8px;
+        letter-spacing: 0.15em;
+        color: #222;
+        text-transform: uppercase;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      #bar-container:hover #bar-label {
+        opacity: 1;
+      }
+
+      #bar {
+        width: 100%;
         height: 4px;
         background: #111;
-        z-index: 200;
       }
 
       #bar-fill {
@@ -270,12 +290,17 @@
         letter-spacing: 0.2em;
         color: #222;
         text-transform: uppercase;
+        transition: opacity 0.5s ease-out;
       }
 
-      #sound-toggle {
+      #hint.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .bottom-btn {
         position: fixed;
         bottom: 16px;
-        right: 16px;
         font-family: 'Courier New', monospace;
         font-size: 10px;
         letter-spacing: 0.1em;
@@ -289,14 +314,27 @@
         transition: color 0.1s, border-color 0.1s;
       }
 
-      #sound-toggle:hover {
+      .bottom-btn:hover {
         color: #555;
         border-color: #444;
+      }
+
+      #sound-toggle {
+        right: 16px;
       }
 
       #sound-toggle.on {
         color: #00ff88;
         border-color: #00ff88;
+      }
+
+      #reset-btn {
+        right: 110px;
+      }
+
+      #reset-btn:hover {
+        color: #ff0040;
+        border-color: #ff0040;
       }
     </style>
   </head>
@@ -326,15 +364,45 @@
       <span>TOTAL DMG</span> <span id="s-dmg">0</span>
     </div>
 
-    <div id="bar"><div id="bar-fill"></div></div>
+    <div id="bar-container">
+      <div id="bar-label">intensity</div>
+      <div id="bar"><div id="bar-fill"></div></div>
+    </div>
 
     <div id="hint">click to destroy</div>
 
-    <button id="sound-toggle">sound: off</button>
+    <button id="reset-btn" class="bottom-btn">reset</button>
+    <button id="sound-toggle" class="bottom-btn">sound: off</button>
 
     <script>
+      // ===========================================
+      // GAME CONFIGURATION
+      // ===========================================
+      const CONFIG = {
+        // Damage
+        BASE_DAMAGE: 10,              // Base damage per click
+        CRIT_MULTIPLIER: 3,           // Damage multiplier on critical hit
+        COMBO_DAMAGE_BONUS: 0.04,     // Extra damage multiplier per combo (e.g., 0.04 = +4% per combo)
+
+        // Combo system
+        COMBO_WINDOW_MS: 300,         // Max ms between clicks to maintain/build combo
+        COMBO_DECAY_MS: 400,          // Ms of no clicks before combo starts decaying
+        MAX_COMBO: 99,                // Maximum combo multiplier
+
+        // Critical hits
+        BASE_CRIT_CHANCE: 0.12,       // Base chance to crit (12%)
+        CRIT_CHANCE_PER_COMBO: 0.008, // Additional crit chance per combo point
+
+        // Timing
+        DPS_WINDOW_MS: 1000,          // Window for calculating DPS
+        TICK_INTERVAL_MS: 50,         // Game loop interval
+
+        // UI
+        INTENSITY_BAR_MAX_HITS: 10,   // Hits needed to fill intensity bar
+      };
+
       const S = {
-        base: 10,
+        base: CONFIG.BASE_DAMAGE,
         combo: 0,
         last: 0,
         log: [],
@@ -351,9 +419,53 @@
       const bar = $('bar-fill');
       const bestEl = $('best-value');
       const newBestEl = $('new-best');
+      const hint = $('hint');
 
       // Initialize best display
       bestEl.textContent = S.best;
+
+      // Object pools for DOM elements
+      const hitPool = [];
+      const ringPool = [];
+      const POOL_SIZE = 30;
+
+      // Pre-create pooled elements
+      for (let i = 0; i < POOL_SIZE; i++) {
+        const hit = document.createElement('div');
+        hit.className = 'hit norm';
+        hit.style.display = 'none';
+        document.body.appendChild(hit);
+        hitPool.push(hit);
+
+        const ring = document.createElement('div');
+        ring.className = 'ring';
+        ring.style.display = 'none';
+        document.body.appendChild(ring);
+        ringPool.push(ring);
+      }
+
+      function getPooledHit() {
+        for (const el of hitPool) {
+          if (el.style.display === 'none') return el;
+        }
+        return hitPool[0]; // Reuse oldest if all in use
+      }
+
+      function getPooledRing() {
+        for (const el of ringPool) {
+          if (el.style.display === 'none') return el;
+        }
+        return ringPool[0]; // Reuse oldest if all in use
+      }
+
+      function releaseHit(el) {
+        el.style.display = 'none';
+        el.classList.remove('crit', 'norm');
+      }
+
+      function releaseRing(el) {
+        el.style.display = 'none';
+      }
 
       // Audio system
       let audioCtx = null;
@@ -379,6 +491,28 @@
       }
 
       soundToggle.addEventListener('click', toggleSound);
+
+      // Reset functionality
+      const resetBtn = $('reset-btn');
+
+      function resetGame(e) {
+        e.stopPropagation();
+        if (!confirm('Reset all stats and high score?')) return;
+
+        S.combo = 0;
+        S.last = 0;
+        S.log = [];
+        S.hits = 0;
+        S.dmg = 0;
+        S.crits = 0;
+        S.best = 0;
+        localStorage.removeItem('clickdps-best');
+        bestEl.textContent = '0';
+        hint.classList.remove('hidden');
+        render();
+      }
+
+      resetBtn.addEventListener('click', resetGame);
 
       function playHit(crit, combo) {
         if (!soundEnabled) return;
@@ -424,16 +558,19 @@
       function smash(x, y) {
         const now = performance.now();
 
+        // Hide hint on first click
+        if (S.hits === 0) hint.classList.add('hidden');
+
         // Combo
-        S.combo = (now - S.last < 300) ? Math.min(S.combo + 1, 99) : 0;
+        S.combo = (now - S.last < CONFIG.COMBO_WINDOW_MS) ? Math.min(S.combo + 1, CONFIG.MAX_COMBO) : 0;
         S.last = now;
 
         // Crit
-        const crit = Math.random() < (0.12 + S.combo * 0.008);
+        const crit = Math.random() < (CONFIG.BASE_CRIT_CHANCE + S.combo * CONFIG.CRIT_CHANCE_PER_COMBO);
 
         // Damage
-        const mult = 1 + S.combo * 0.04;
-        const d = Math.round(S.base * mult * (crit ? 3 : 1));
+        const mult = 1 + S.combo * CONFIG.COMBO_DAMAGE_BONUS;
+        const d = Math.round(S.base * mult * (crit ? CONFIG.CRIT_MULTIPLIER : 1));
 
         // Stats
         S.hits++;
@@ -443,22 +580,27 @@
         // Sound
         playHit(crit, S.combo);
 
-        // Popup
-        const el = document.createElement('div');
+        // Popup (using object pool)
+        const el = getPooledHit();
         el.className = `hit ${crit ? 'crit' : 'norm'}`;
         el.textContent = d;
         el.style.left = (x + (Math.random() - 0.5) * 20) + 'px';
         el.style.top = (y - 10) + 'px';
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), crit ? 700 : 500);
+        el.style.display = 'block';
+        el.style.animation = 'none';
+        el.offsetHeight; // Trigger reflow
+        el.style.animation = '';
+        setTimeout(() => releaseHit(el), crit ? 700 : 500);
 
-        // Ring
-        const ring = document.createElement('div');
-        ring.className = 'ring';
+        // Ring (using object pool)
+        const ring = getPooledRing();
         ring.style.left = x + 'px';
         ring.style.top = y + 'px';
-        document.body.appendChild(ring);
-        setTimeout(() => ring.remove(), 300);
+        ring.style.display = 'block';
+        ring.style.animation = 'none';
+        ring.offsetHeight; // Trigger reflow
+        ring.style.animation = '';
+        setTimeout(() => releaseRing(ring), 300);
 
         // Crit flash
         if (crit) {
@@ -475,7 +617,7 @@
 
       function render() {
         const now = performance.now();
-        S.log = S.log.filter(e => e.t > now - 1000);
+        S.log = S.log.filter(e => e.t > now - CONFIG.DPS_WINDOW_MS);
 
         const total = S.log.reduce((a, e) => a + e.d, 0);
         dps.textContent = total;
@@ -502,7 +644,7 @@
         }
 
         // Intensity bar
-        const int = Math.min(S.log.length / 10, 1);
+        const int = Math.min(S.log.length / CONFIG.INTENSITY_BAR_MAX_HITS, 1);
         bar.style.width = (int * 100) + '%';
 
         // Stats
@@ -511,24 +653,39 @@
       }
 
       function tick() {
-        if (performance.now() - S.last > 350 && S.combo > 0) {
+        if (performance.now() - S.last > CONFIG.COMBO_DECAY_MS && S.combo > 0) {
           S.combo = Math.max(0, S.combo - 1);
         }
         render();
       }
 
       document.addEventListener('click', e => {
-        if (e.target === soundToggle) return;
+        if (e.target === soundToggle || e.target === resetBtn) return;
         smash(e.clientX, e.clientY);
       });
       document.addEventListener('touchstart', e => {
-        // Allow sound toggle button to work normally
-        if (e.target === soundToggle) return;
+        // Allow buttons to work normally
+        if (e.target === soundToggle || e.target === resetBtn) return;
         e.preventDefault();
         for (const t of e.touches) smash(t.clientX, t.clientY);
       }, { passive: false });
 
-      setInterval(tick, 50);
+      // Game loop with visibility handling
+      let tickInterval = setInterval(tick, CONFIG.TICK_INTERVAL_MS);
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          clearInterval(tickInterval);
+          tickInterval = null;
+        } else {
+          // Reset timing state when returning to prevent stale data
+          S.log = [];
+          S.last = 0;
+          S.combo = 0;
+          if (!tickInterval) tickInterval = setInterval(tick, CONFIG.TICK_INTERVAL_MS);
+          render();
+        }
+      });
     </script>
   </body>
 </html>
