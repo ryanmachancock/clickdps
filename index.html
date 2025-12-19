@@ -511,8 +511,13 @@
         render();
       }
 
-      document.addEventListener('click', e => smash(e.clientX, e.clientY));
+      document.addEventListener('click', e => {
+        if (e.target === soundToggle) return;
+        smash(e.clientX, e.clientY);
+      });
       document.addEventListener('touchstart', e => {
+        // Allow sound toggle button to work normally
+        if (e.target === soundToggle) return;
         e.preventDefault();
         for (const t of e.touches) smash(t.clientX, t.clientY);
       }, { passive: false });
