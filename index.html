@@ -326,6 +326,53 @@
       // Initialize best display
       bestEl.textContent = S.best;
 
+      // Audio system
+      let audioCtx = null;
+      function getAudioCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+      }
+
+      function playHit(crit, combo) {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+
+        // Create oscillator
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (crit) {
+          // Crit: punchy low hit with distortion feel
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(80 + Math.random() * 20, now);
+          osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(800, now);
+          filter.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+          gain.gain.setValueAtTime(0.4, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        } else {
+          // Normal: quick snappy tick, pitch increases with combo
+          const baseFreq = 400 + combo * 8 + Math.random() * 50;
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(baseFreq, now);
+          osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.5, now + 0.05);
+          filter.type = 'highpass';
+          filter.frequency.setValueAtTime(200, now);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        }
+      }
+
       function smash(x, y) {
         const now = performance.now();
 
@@ -344,6 +391,9 @@
         S.hits++;
         S.dmg += d;
         if (crit) S.crits++;
+
+        // Sound
+        playHit(crit, S.combo);
 
         // Popup
         const el = document.createElement('div');
