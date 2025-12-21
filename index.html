@@ -3,9 +3,136 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <meta name="description" content="ClickDPS - An addictive clicker game. Build combos, land critical hits, and chase your highest damage per second score." />
+    <meta property="og:title" content="ClickDPS - Click to Destroy" />
+    <meta property="og:description" content="An addictive clicker game. Build combos, land critical hits, and chase your highest DPS score." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23000' width='100' height='100'/%3E%3Ctext x='50' y='50' text-anchor='middle' dominant-baseline='central' font-family='monospace' font-weight='900' font-size='60' fill='%23fff'%3EDPS%3C/text%3E%3Crect x='5' y='5' width='20' height='20' fill='none' stroke='%23ff0040' stroke-width='4'/%3E%3Crect x='75' y='75' width='20' height='20' fill='none' stroke='%2300ff88' stroke-width='4'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=VT323&family=Playfair+Display:wght@700;900&family=Space+Mono:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <title>CLICKDPS</title>
     <style>
+      /* ==========================================
+         THEME: CYBER - Sleek cyberpunk, techy
+         ========================================== */
+      :root, [data-theme="cyber"] {
+        --spacing: 16px;
+        --spacing-sm: 8px;
+        --color-bg: #0a0a12;
+        --color-text: #ffffff;
+        --color-accent: #ff0080;
+        --color-success: #00ffff;
+        --color-muted: #8888aa;
+        --color-subtle: #3a3a5a;
+        --color-border: #2a2a4a;
+        --color-grid: #15152a;
+        --color-glow: rgba(255, 0, 128, 0.5);
+        --font-main: 'Orbitron', sans-serif;
+        --font-body: 'Space Mono', monospace;
+        --border-style: 2px solid;
+        --corner-size: 30px;
+        --grid-size: 40px;
+        --grid-style: linear-gradient(var(--color-grid) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+      }
+
+      /* ==========================================
+         THEME: ARCADE - Retro 8-bit pixel style
+         ========================================== */
+      [data-theme="arcade"] {
+        --color-bg: #1a1a2e;
+        --color-text: #eeff00;
+        --color-accent: #ff0055;
+        --color-success: #00ff88;
+        --color-muted: #aa88ff;
+        --color-subtle: #4a4a6e;
+        --color-border: #3a3a5e;
+        --color-grid: #22223a;
+        --color-glow: rgba(255, 0, 85, 0.6);
+        --font-main: 'VT323', monospace;
+        --font-body: 'VT323', monospace;
+        --border-style: 4px solid;
+        --corner-size: 20px;
+        --grid-size: 32px;
+        --grid-style:
+          linear-gradient(var(--color-grid) 2px, transparent 2px),
+          linear-gradient(90deg, var(--color-grid) 2px, transparent 2px);
+      }
+
+      /* ==========================================
+         THEME: SYNTH - 80s outrun, sunset vibes
+         ========================================== */
+      [data-theme="synth"] {
+        --color-bg: #0f0a1e;
+        --color-text: #fff;
+        --color-accent: #ff2975;
+        --color-success: #f6d365;
+        --color-muted: #c56cf0;
+        --color-subtle: #5a3d7a;
+        --color-border: #3d2a5a;
+        --color-grid: #1a1030;
+        --color-glow: rgba(255, 41, 117, 0.5);
+        --font-main: 'Orbitron', sans-serif;
+        --font-body: 'Space Mono', monospace;
+        --border-style: 2px solid;
+        --corner-size: 25px;
+        --grid-size: 60px;
+        --grid-style:
+          linear-gradient(transparent 0%, transparent 49%, var(--color-grid) 50%, transparent 51%, transparent 100%),
+          linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+      }
+
+      /* ==========================================
+         THEME: BLOOM - Cute, soft, floral
+         ========================================== */
+      [data-theme="bloom"] {
+        --color-bg: #fff5f8;
+        --color-text: #5c4a5e;
+        --color-accent: #ff6b9d;
+        --color-success: #7ed99f;
+        --color-muted: #c9a0b5;
+        --color-subtle: #e8c8d8;
+        --color-border: #f0d0e0;
+        --color-grid: #ffe8ef;
+        --color-glow: rgba(255, 107, 157, 0.4);
+        --font-main: 'Quicksand', 'Comic Sans MS', cursive;
+        --font-body: 'Quicksand', 'Comic Sans MS', cursive;
+        --border-style: 3px solid;
+        --corner-size: 20px;
+        --grid-size: 50px;
+        --grid-style:
+          radial-gradient(circle, var(--color-grid) 1px, transparent 1px);
+      }
+
+      /* ==========================================
+         THEME: BRUTAL - Raw, industrial, bold
+         ========================================== */
+      [data-theme="brutal"] {
+        --color-bg: #ffffff;
+        --color-text: #000000;
+        --color-accent: #ff0000;
+        --color-success: #000000;
+        --color-muted: #555555;
+        --color-subtle: #aaaaaa;
+        --color-border: #000000;
+        --color-grid: #f0f0f0;
+        --color-glow: rgba(255, 0, 0, 0.3);
+        --font-main: 'Arial Black', 'Impact', sans-serif;
+        --font-body: 'Arial', sans-serif;
+        --border-style: 4px solid;
+        --corner-size: 0px;
+        --grid-size: 50px;
+        --grid-style:
+          linear-gradient(var(--color-grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+      }
+
+      /* Ambient mode modifiers */
+      [data-ambient="true"] {
+        --ambient-multiplier: 0.6;
+      }
+
       * { margin: 0; padding: 0; box-sizing: border-box; }
 
       html, body {
@@ -16,69 +143,129 @@
       }
 
       body {
-        background: #000;
-        color: #fff;
-        font-family: 'Courier New', monospace;
+        background: var(--color-bg);
+        color: var(--color-text);
+        font-family: var(--font-body);
         cursor: crosshair;
         user-select: none;
         position: fixed;
         width: 100%;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      /* Screen shake container */
+      #shake-container {
+        position: fixed;
+        inset: 0;
+        transition: transform 0.05s ease-out;
+        contain: layout style;
+        will-change: transform;
       }
 
       /* Grid background */
-      body::before {
-        content: "";
+      #grid-bg {
         position: fixed;
         inset: 0;
-        background-image:
-          linear-gradient(#111 1px, transparent 1px),
-          linear-gradient(90deg, #111 1px, transparent 1px);
-        background-size: 40px 40px;
+        background-image: var(--grid-style);
+        background-size: var(--grid-size) var(--grid-size);
         opacity: 0.5;
         pointer-events: none;
+        transition: opacity 0.1s, transform 0.3s;
+      }
+
+      /* Intensity glow overlay */
+      #intensity-glow {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        background: radial-gradient(circle at 50% 50%, var(--color-glow) 0%, transparent 70%);
+        transition: opacity 0.2s;
+        z-index: 5;
+      }
+
+      /* Edge glow for milestones */
+      #edge-glow {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        box-shadow: inset 0 0 100px var(--color-accent);
+        z-index: 6;
+      }
+
+      #edge-glow.pulse {
+        animation: edge-pulse 0.8s ease-out;
+      }
+
+      @keyframes edge-pulse {
+        0% { opacity: 0.8; }
+        100% { opacity: 0; }
       }
 
       #hud {
         position: fixed;
-        top: 16px;
-        left: 16px;
+        top: var(--spacing);
+        left: var(--spacing);
         z-index: 100;
         mix-blend-mode: difference;
       }
 
       #dps-num {
+        font-family: var(--font-main);
         font-size: clamp(64px, 20vw, 200px);
         font-weight: 900;
         line-height: 0.8;
-        letter-spacing: -0.06em;
-        color: #fff;
+        letter-spacing: -0.02em;
+        color: var(--color-text);
         text-shadow:
-          4px 4px 0 #ff0040,
-          -2px -2px 0 #00ff88;
+          4px 4px 0 var(--color-accent),
+          -2px -2px 0 var(--color-success);
+        transition: transform 0.1s ease-out, text-shadow 0.3s, font-family 0.3s;
+      }
+
+      #dps-num.pulse {
+        animation: dps-pulse 0.2s ease-out;
+      }
+
+      @keyframes dps-pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+
+      #dps-num.big-pulse {
+        animation: dps-big-pulse 0.4s ease-out;
+      }
+
+      @keyframes dps-big-pulse {
+        0% { transform: scale(1); }
+        30% { transform: scale(1.15); }
+        100% { transform: scale(1); }
       }
 
       #label {
         font-size: 10px;
         letter-spacing: 0.4em;
-        color: #444;
+        color: var(--color-subtle);
         text-transform: uppercase;
-        margin-top: 8px;
+        margin-top: var(--spacing-sm);
       }
 
       #combo {
         display: inline-block;
         font-size: clamp(18px, 5vw, 32px);
         font-weight: 900;
-        color: #ff0040;
+        color: var(--color-accent);
         opacity: 0;
-        transition: opacity 0.1s;
+        transition: opacity 0.1s, transform 0.1s;
         margin-left: 12px;
         vertical-align: bottom;
       }
 
       #best {
         position: fixed;
-        top: 16px;
+        top: var(--spacing);
         left: 50%;
         transform: translateX(-50%);
         text-align: center;
@@ -88,14 +275,14 @@
       #best-label {
         font-size: 10px;
         letter-spacing: 0.2em;
-        color: #444;
+        color: var(--color-subtle);
         text-transform: uppercase;
       }
 
       #best-value {
         font-size: 22px;
         font-weight: 900;
-        color: #00ff88;
+        color: var(--color-success);
         letter-spacing: -0.02em;
       }
 
@@ -106,7 +293,7 @@
         transform: translate(-50%, -50%);
         font-size: 14px;
         letter-spacing: 0.3em;
-        color: #00ff88;
+        color: var(--color-success);
         text-transform: uppercase;
         opacity: 0;
         pointer-events: none;
@@ -126,6 +313,32 @@
         opacity: 1;
       }
 
+      /* Milestone notification */
+      #milestone {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        color: var(--color-accent);
+        text-shadow: 0 0 30px var(--color-accent);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 61;
+      }
+
+      #milestone.show {
+        animation: milestone-anim 1s ease-out forwards;
+      }
+
+      @keyframes milestone-anim {
+        0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+        20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+        100% { opacity: 0; transform: translate(-50%, -70%) scale(1); }
+      }
+
       #bar-container {
         position: fixed;
         bottom: 0;
@@ -137,10 +350,10 @@
       #bar-label {
         position: absolute;
         bottom: 6px;
-        left: 16px;
+        left: var(--spacing);
         font-size: 8px;
         letter-spacing: 0.15em;
-        color: #222;
+        color: var(--color-muted);
         text-transform: uppercase;
         opacity: 0;
         transition: opacity 0.2s;
@@ -153,29 +366,29 @@
       #bar {
         width: 100%;
         height: 4px;
-        background: #111;
+        background: var(--color-grid);
       }
 
       #bar-fill {
         height: 100%;
         width: 0%;
-        background: #fff;
-        transition: width 0.05s linear;
+        background: var(--color-text);
+        transition: width 0.05s linear, background-color 0.3s;
       }
 
       #stats {
         position: fixed;
-        top: 16px;
-        right: 16px;
+        top: var(--spacing);
+        right: var(--spacing);
         text-align: right;
         font-size: 14px;
         line-height: 1.9;
-        color: #555;
+        color: var(--color-muted);
         z-index: 100;
       }
 
       #stats span {
-        color: #777;
+        color: #888;
       }
 
       /* Damage popups */
@@ -185,17 +398,20 @@
         pointer-events: none;
         z-index: 60;
         animation: pop 0.5s ease-out forwards;
+        will-change: transform, opacity;
+        transform: translateZ(0);
+        backface-visibility: hidden;
       }
 
       .hit.norm {
         font-size: 28px;
-        color: #fff;
+        color: var(--color-text);
       }
 
       .hit.crit {
         font-size: 48px;
-        color: #ff0040;
-        text-shadow: 0 0 20px #ff0040;
+        color: var(--color-accent);
+        text-shadow: 0 0 20px var(--color-accent);
         animation: pop-crit 0.7s ease-out forwards;
       }
 
@@ -229,11 +445,13 @@
         position: absolute;
         width: 80px;
         height: 80px;
-        border: 2px solid #fff;
+        border: 2px solid var(--color-text);
         border-radius: 50%;
         pointer-events: none;
-        transform: translate(-50%, -50%) scale(0);
+        transform: translate(-50%, -50%) scale(0) translateZ(0);
         animation: ring-out 0.3s ease-out forwards;
+        will-change: transform, opacity;
+        backface-visibility: hidden;
       }
 
       @keyframes ring-out {
@@ -247,11 +465,40 @@
         }
       }
 
+      /* Particle effects */
+      .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--color-accent);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 55;
+        will-change: transform, opacity;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+      }
+
+      /* Cursor trail */
+      .trail {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: var(--color-text);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 50;
+        opacity: 0.6;
+        will-change: transform, opacity;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+      }
+
       /* Crit flash */
       #flash {
         position: fixed;
         inset: 0;
-        background: #ff0040;
+        background: var(--color-accent);
         opacity: 0;
         pointer-events: none;
         z-index: 9999;
@@ -270,16 +517,17 @@
       /* Corner decorations */
       .corner {
         position: fixed;
-        width: 30px;
-        height: 30px;
-        border: 2px solid #222;
+        width: var(--corner-size);
+        height: var(--corner-size);
+        border: var(--border-style) var(--color-border);
         pointer-events: none;
         z-index: 10;
+        transition: border-color 0.3s, width 0.3s, height 0.3s;
       }
-      .corner.tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
-      .corner.tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
-      .corner.bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
-      .corner.br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+      .corner.tl { top: var(--spacing-sm); left: var(--spacing-sm); border-right: none; border-bottom: none; }
+      .corner.tr { top: var(--spacing-sm); right: var(--spacing-sm); border-left: none; border-bottom: none; }
+      .corner.bl { bottom: var(--spacing-sm); left: var(--spacing-sm); border-right: none; border-top: none; }
+      .corner.br { bottom: var(--spacing-sm); right: var(--spacing-sm); border-left: none; border-top: none; }
 
       #hint {
         position: fixed;
@@ -288,7 +536,7 @@
         transform: translateX(-50%);
         font-size: 10px;
         letter-spacing: 0.2em;
-        color: #222;
+        color: var(--color-muted);
         text-transform: uppercase;
         transition: opacity 0.5s ease-out;
       }
@@ -300,79 +548,346 @@
 
       .bottom-btn {
         position: fixed;
-        bottom: 16px;
-        font-family: 'Courier New', monospace;
-        font-size: 10px;
+        bottom: var(--spacing);
+        font-family: var(--font-body);
+        font-size: 11px;
         letter-spacing: 0.1em;
-        color: #333;
+        color: var(--color-muted);
         background: none;
-        border: 1px solid #222;
-        padding: 6px 10px;
+        border: var(--border-style) var(--color-border);
+        padding: 12px 16px;
         cursor: pointer;
         text-transform: uppercase;
         z-index: 100;
-        transition: color 0.1s, border-color 0.1s;
+        transition: color 0.1s, border-color 0.1s, transform 0.05s;
+        min-height: 44px;
+        min-width: 44px;
       }
 
       .bottom-btn:hover {
-        color: #555;
-        border-color: #444;
+        color: #888;
+        border-color: var(--color-subtle);
+      }
+
+      .bottom-btn:active {
+        transform: scale(0.95);
       }
 
       #sound-toggle {
-        right: 16px;
+        right: var(--spacing);
       }
 
       #sound-toggle.on {
-        color: #00ff88;
-        border-color: #00ff88;
+        color: var(--color-success);
+        border-color: var(--color-success);
       }
 
       #reset-btn {
-        right: 110px;
+        right: 120px;
       }
 
       #reset-btn:hover {
-        color: #ff0040;
-        border-color: #ff0040;
+        color: var(--color-accent);
+        border-color: var(--color-accent);
+      }
+
+      #theme-btn {
+        left: var(--spacing);
+      }
+
+      #ambient-btn {
+        left: 120px;
+      }
+
+      #ambient-btn.on {
+        color: var(--color-success);
+        border-color: var(--color-success);
+      }
+
+      /* Confirmation modal */
+      #modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 10000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #modal-overlay.show {
+        display: flex;
+      }
+
+      #modal {
+        background: var(--color-bg);
+        border: 2px solid var(--color-border);
+        padding: 24px 32px;
+        text-align: center;
+        max-width: 300px;
+      }
+
+      #modal-message {
+        font-size: 14px;
+        letter-spacing: 0.1em;
+        color: var(--color-text);
+        margin-bottom: 20px;
+        text-transform: uppercase;
+      }
+
+      #modal-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      }
+
+      .modal-btn {
+        font-family: var(--font-body);
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        padding: 10px 20px;
+        cursor: pointer;
+        text-transform: uppercase;
+        border: var(--border-style) var(--color-border);
+        background: none;
+        color: var(--color-muted);
+        transition: color 0.1s, border-color 0.1s, transform 0.05s;
+        min-height: 44px;
+      }
+
+      .modal-btn:active {
+        transform: scale(0.95);
+      }
+
+      #modal-confirm {
+        color: var(--color-accent);
+        border-color: var(--color-accent);
+      }
+
+      #modal-confirm:hover {
+        color: var(--color-text);
+        background: var(--color-accent);
+      }
+
+      #modal-cancel:hover {
+        color: var(--color-text);
+        border-color: var(--color-muted);
+      }
+
+      /* Ambient mode styles */
+      [data-ambient="true"] #dps-num {
+        transition: transform 0.3s ease-out;
+      }
+
+      [data-ambient="true"] .hit {
+        animation-duration: 1s;
+      }
+
+      [data-ambient="true"] .hit.crit {
+        animation-duration: 1.2s;
+      }
+
+      [data-ambient="true"] .ring {
+        animation-duration: 0.6s;
+      }
+
+      /* ==========================================
+         THEME-SPECIFIC STYLES
+         ========================================== */
+
+      /* ARCADE: Bigger, chunkier text, scanlines */
+      [data-theme="arcade"] #dps-num {
+        letter-spacing: 0.05em;
+        text-shadow:
+          6px 6px 0 var(--color-accent),
+          -3px -3px 0 var(--color-success);
+      }
+
+      [data-theme="arcade"] .hit {
+        font-size: 36px;
+      }
+
+      [data-theme="arcade"] .hit.crit {
+        font-size: 56px;
+      }
+
+      [data-theme="arcade"]::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.1) 0px,
+          rgba(0, 0, 0, 0.1) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+        pointer-events: none;
+        z-index: 9998;
+      }
+
+      /* SYNTH: Glowy, warm sunset vibes */
+      [data-theme="synth"] #dps-num {
+        text-shadow:
+          0 0 20px var(--color-accent),
+          4px 4px 0 var(--color-accent),
+          -2px -2px 0 var(--color-success);
+      }
+
+      [data-theme="synth"] .hit {
+        text-shadow: 0 0 10px currentColor;
+      }
+
+      [data-theme="synth"] .hit.crit {
+        text-shadow: 0 0 20px var(--color-accent), 0 0 40px var(--color-accent);
+      }
+
+      [data-theme="synth"] .ring {
+        box-shadow: 0 0 15px var(--color-accent);
+      }
+
+      [data-theme="synth"] #intensity-glow {
+        background: radial-gradient(ellipse at 50% 100%, var(--color-glow) 0%, transparent 60%);
+      }
+
+      /* BRUTAL: Heavy, raw, in your face */
+      [data-theme="brutal"] #dps-num {
+        text-shadow:
+          8px 8px 0 var(--color-accent),
+          -4px -4px 0 var(--color-border);
+        letter-spacing: 0.02em;
+      }
+
+      [data-theme="brutal"] .hit {
+        font-family: 'Arial Black', sans-serif;
+      }
+
+      [data-theme="brutal"] .hit.crit {
+        font-size: 64px;
+      }
+
+      [data-theme="brutal"] #flash {
+        mix-blend-mode: multiply;
+      }
+
+      [data-theme="brutal"] .corner {
+        display: none;
+      }
+
+      [data-theme="brutal"] .ring {
+        border-width: 4px;
+      }
+
+      /* BLOOM: Soft, rounded, cute */
+      [data-theme="bloom"] #dps-num {
+        text-shadow:
+          3px 3px 0 var(--color-accent),
+          -2px -2px 0 var(--color-success);
+        letter-spacing: 0.02em;
+      }
+
+      [data-theme="bloom"] .hit {
+        font-family: 'Quicksand', cursive;
+        font-weight: 700;
+      }
+
+      [data-theme="bloom"] .hit.crit {
+        color: var(--color-accent);
+        text-shadow: 0 0 15px var(--color-accent), 0 0 30px rgba(255, 107, 157, 0.5);
+      }
+
+      [data-theme="bloom"] .corner {
+        border-radius: 8px;
+      }
+
+      [data-theme="bloom"] .ring {
+        border-color: var(--color-accent);
+        border-width: 3px;
+        box-shadow: 0 0 10px var(--color-glow);
+      }
+
+      [data-theme="bloom"] .bottom-btn {
+        border-radius: 20px;
+      }
+
+      [data-theme="bloom"] #modal {
+        border-radius: 16px;
+      }
+
+      [data-theme="bloom"] .modal-btn {
+        border-radius: 12px;
+      }
+
+      [data-theme="bloom"] #intensity-glow {
+        background: radial-gradient(circle at 50% 50%, rgba(255, 107, 157, 0.3) 0%, rgba(126, 217, 159, 0.1) 50%, transparent 70%);
+      }
+
+      /* FX Canvas for theme-specific effects */
+      #fx-canvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 4;
       }
     </style>
   </head>
 
   <body>
-    <div class="corner tl"></div>
-    <div class="corner tr"></div>
-    <div class="corner bl"></div>
-    <div class="corner br"></div>
+    <div id="shake-container">
+      <div id="grid-bg"></div>
+      <div id="intensity-glow"></div>
+      <div id="edge-glow"></div>
+      <canvas id="fx-canvas"></canvas>
 
-    <div id="flash"></div>
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
 
-    <div id="hud">
-      <div><span id="dps-num" data-value="0">0</span><span id="combo"></span></div>
-      <div id="label">dmg/sec</div>
+      <div id="flash"></div>
+
+      <div id="hud">
+        <div><span id="dps-num" data-value="0" role="status" aria-live="polite" aria-label="Current damage per second">0</span><span id="combo" aria-label="Combo multiplier"></span></div>
+        <div id="label">dmg/sec</div>
+      </div>
+
+      <div id="best">
+        <div id="best-label">Best DPS</div>
+        <div id="best-value" aria-label="Best damage per second score">0</div>
+      </div>
+
+      <div id="new-best">New Record!</div>
+      <div id="milestone"></div>
+
+      <div id="stats">
+        <span>CLICKS</span> <span id="s-hits">0</span><br>
+        <span>TOTAL DMG</span> <span id="s-dmg">0</span>
+      </div>
+
+      <div id="bar-container">
+        <div id="bar-label">intensity</div>
+        <div id="bar"><div id="bar-fill"></div></div>
+      </div>
+
+      <div id="hint">click to destroy</div>
     </div>
 
-    <div id="best">
-      <div id="best-label">High Score</div>
-      <div id="best-value">0</div>
+    <button id="theme-btn" class="bottom-btn" aria-label="Change color theme">cyber</button>
+    <button id="ambient-btn" class="bottom-btn" aria-label="Toggle ambient mode">ambient</button>
+    <button id="reset-btn" class="bottom-btn" aria-label="Reset all stats and high score">reset</button>
+    <button id="sound-toggle" class="bottom-btn" aria-label="Toggle sound on or off" aria-pressed="false">sound: off</button>
+
+    <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-message">
+      <div id="modal">
+        <div id="modal-message">Reset all stats and high score?</div>
+        <div id="modal-buttons">
+          <button id="modal-cancel" class="modal-btn">Cancel</button>
+          <button id="modal-confirm" class="modal-btn">Reset</button>
+        </div>
+      </div>
     </div>
-
-    <div id="new-best">New Record!</div>
-
-    <div id="stats">
-      <span>CLICKS</span> <span id="s-hits">0</span><br>
-      <span>TOTAL DMG</span> <span id="s-dmg">0</span>
-    </div>
-
-    <div id="bar-container">
-      <div id="bar-label">intensity</div>
-      <div id="bar"><div id="bar-fill"></div></div>
-    </div>
-
-    <div id="hint">click to destroy</div>
-
-    <button id="reset-btn" class="bottom-btn">reset</button>
-    <button id="sound-toggle" class="bottom-btn">sound: off</button>
 
     <script>
       // ===========================================
@@ -380,27 +895,80 @@
       // ===========================================
       const CONFIG = {
         // Damage
-        BASE_DAMAGE: 10,              // Base damage per click
-        CRIT_MULTIPLIER: 3,           // Damage multiplier on critical hit
-        COMBO_DAMAGE_BONUS: 0.04,     // Extra damage multiplier per combo (e.g., 0.04 = +4% per combo)
+        BASE_DAMAGE: 10,
+        CRIT_MULTIPLIER: 3,
+        COMBO_DAMAGE_BONUS: 0.04,
 
         // Combo system
-        COMBO_WINDOW_MS: 300,         // Max ms between clicks to maintain/build combo
-        COMBO_DECAY_MS: 400,          // Ms of no clicks before combo starts decaying
-        MAX_COMBO: 99,                // Maximum combo multiplier
+        COMBO_WINDOW_MS: 300,
+        COMBO_DECAY_MS: 400,
+        MAX_COMBO: 99,
 
         // Critical hits
-        BASE_CRIT_CHANCE: 0.12,       // Base chance to crit (12%)
-        CRIT_CHANCE_PER_COMBO: 0.008, // Additional crit chance per combo point
+        BASE_CRIT_CHANCE: 0.12,
+        CRIT_CHANCE_PER_COMBO: 0.008,
 
         // Timing
-        DPS_WINDOW_MS: 1000,          // Window for calculating DPS
-        TICK_INTERVAL_MS: 50,         // Game loop interval
+        DPS_WINDOW_MS: 1000,
+        TICK_INTERVAL_MS: 50,
 
         // UI
-        INTENSITY_BAR_MAX_HITS: 10,   // Hits needed to fill intensity bar
+        INTENSITY_BAR_MAX_HITS: 10,
+
+        // Storage keys
+        STORAGE_KEY_BEST: 'clickdps-best',
+        STORAGE_KEY_SOUND: 'clickdps-sound',
+        STORAGE_KEY_THEME: 'clickdps-theme',
+        STORAGE_KEY_AMBIENT: 'clickdps-ambient',
+
+        // Visual effects
+        MAX_SHAKE: 8,
+        SHAKE_DECAY: 0.9,
+        TRAIL_LENGTH: 8,
+        PARTICLE_COUNT: 12,
+
+        // Milestones
+        DAMAGE_MILESTONES: [1000, 5000, 10000, 25000, 50000, 100000],
+        DPS_MILESTONES: [100, 250, 500, 1000, 2000],
+
+        // Themes
+        THEMES: ['cyber', 'arcade', 'synth', 'brutal', 'bloom'],
+
+        // Ambient mode
+        AMBIENT_COMBO_WINDOW_MS: 500,
+        AMBIENT_COMBO_DECAY_MS: 800,
       };
 
+      // ===========================================
+      // SAFE LOCALSTORAGE HELPERS
+      // ===========================================
+      function safeGetItem(key, defaultValue = null) {
+        try {
+          return localStorage.getItem(key) ?? defaultValue;
+        } catch {
+          return defaultValue;
+        }
+      }
+
+      function safeSetItem(key, value) {
+        try {
+          localStorage.setItem(key, value);
+        } catch {
+          // Storage full or unavailable (private browsing)
+        }
+      }
+
+      function safeRemoveItem(key) {
+        try {
+          localStorage.removeItem(key);
+        } catch {
+          // Storage unavailable
+        }
+      }
+
+      // ===========================================
+      // STATE
+      // ===========================================
       const S = {
         base: CONFIG.BASE_DAMAGE,
         combo: 0,
@@ -409,81 +977,866 @@
         hits: 0,
         dmg: 0,
         crits: 0,
-        best: parseInt(localStorage.getItem('clickdps-best') || '0')
+        best: parseInt(safeGetItem(CONFIG.STORAGE_KEY_BEST, '0')),
+        lastMilestoneDmg: 0,
+        lastMilestoneDps: 0,
+        shakeIntensity: 0,
+        mouseX: 0,
+        mouseY: 0,
+        trailPoints: [],
       };
 
+      // ===========================================
+      // DOM REFERENCES
+      // ===========================================
       const $ = id => document.getElementById(id);
       const dps = $('dps-num');
-      const combo = $('combo');
+      const comboEl = $('combo');
       const flash = $('flash');
       const bar = $('bar-fill');
       const bestEl = $('best-value');
       const newBestEl = $('new-best');
       const hint = $('hint');
+      const shakeContainer = $('shake-container');
+      const gridBg = $('grid-bg');
+      const intensityGlow = $('intensity-glow');
+      const edgeGlow = $('edge-glow');
+      const milestoneEl = $('milestone');
+      const themeBtn = $('theme-btn');
+      const ambientBtn = $('ambient-btn');
+      const fxCanvas = $('fx-canvas');
+      const fxCtx = fxCanvas.getContext('2d');
+
+      // ===========================================
+      // FX CANVAS SETUP
+      // ===========================================
+      function resizeCanvas() {
+        fxCanvas.width = window.innerWidth;
+        fxCanvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      // Active effects storage
+      const activeEffects = [];
+
+      // Cached gradients for performance
+      let synthGradientCache = null;
+      let synthGradientHeight = 0;
+
+      function getSynthGradient(height) {
+        // Only recreate gradient if height changed significantly
+        if (!synthGradientCache || Math.abs(height - synthGradientHeight) > 10) {
+          synthGradientHeight = height;
+          synthGradientCache = fxCtx.createLinearGradient(0, fxCanvas.height - height, 0, fxCanvas.height);
+          synthGradientCache.addColorStop(0, '#ff2975');
+          synthGradientCache.addColorStop(0.5, '#f6d365');
+          synthGradientCache.addColorStop(1, '#c56cf0');
+        }
+        return synthGradientCache;
+      }
+
+      // ===========================================
+      // UNIFIED ANIMATION SYSTEM
+      // ===========================================
+      // All animations are managed in a single RAF loop for maximum performance
+      const animations = {
+        particles: [],  // {el, startTime, duration, x, y, vx, vy, ...}
+        trails: [],     // {el, startTime, duration, ...}
+        fxActive: false
+      };
+      let animationFrameId = null;
+
+      function runAnimationLoop(timestamp) {
+        const now = performance.now();
+        let hasActiveAnimations = false;
+
+        // Process particles
+        for (let i = animations.particles.length - 1; i >= 0; i--) {
+          const p = animations.particles[i];
+          const elapsed = now - p.startTime;
+          const progress = elapsed / p.duration;
+
+          if (progress >= 1) {
+            release(p.el);
+            animations.particles.splice(i, 1);
+            continue;
+          }
+
+          hasActiveAnimations = true;
+          const currentX = (p.x + p.vx * progress) | 0;
+          const currentY = (p.y + p.vy * progress + progress * progress * 200) | 0;
+          p.el.style.left = currentX + 'px';
+          p.el.style.top = currentY + 'px';
+          p.el.style.opacity = 1 - progress;
+          p.el.style.transform = `translateZ(0) scale(${1 - progress * 0.5})`;
+        }
+
+        // Process trails
+        for (let i = animations.trails.length - 1; i >= 0; i--) {
+          const t = animations.trails[i];
+          const elapsed = now - t.startTime;
+          const progress = elapsed / t.duration;
+
+          if (progress >= 1) {
+            release(t.el);
+            animations.trails.splice(i, 1);
+            continue;
+          }
+
+          hasActiveAnimations = true;
+          t.el.style.opacity = 0.6 * (1 - progress);
+          t.el.style.transform = `translate(-50%, -50%) translateZ(0) scale(${1 - progress * 0.5})`;
+        }
+
+        // Process canvas FX effects
+        if (activeEffects.length > 0) {
+          hasActiveAnimations = true;
+          renderFxEffectsFrame(now);
+        }
+
+        // Continue loop if there are active animations
+        if (hasActiveAnimations) {
+          animationFrameId = requestAnimationFrame(runAnimationLoop);
+        } else {
+          animationFrameId = null;
+        }
+      }
+
+      function startAnimationLoop() {
+        if (!animationFrameId) {
+          animationFrameId = requestAnimationFrame(runAnimationLoop);
+        }
+      }
+
+      // ===========================================
+      // THEME-SPECIFIC VISUAL EFFECTS
+      // ===========================================
+
+      // CYBER: Digital glitch lines
+      function triggerCyberEffect(x, y, intensity) {
+        const lineCount = 3 + Math.floor(intensity * 5);
+        for (let i = 0; i < lineCount; i++) {
+          activeEffects.push({
+            type: 'cyber-glitch',
+            startTime: performance.now(),
+            duration: 150 + Math.random() * 100,
+            y: Math.random() * fxCanvas.height,
+            width: 50 + Math.random() * 200,
+            height: 2 + Math.random() * 4,
+            offset: (Math.random() - 0.5) * 20,
+            color: Math.random() > 0.5 ? '#ff0080' : '#00ffff',
+          });
+        }
+        // Add horizontal scan line
+        activeEffects.push({
+          type: 'cyber-scan',
+          startTime: performance.now(),
+          duration: 200,
+          y: y,
+          speed: (Math.random() > 0.5 ? 1 : -1) * (300 + Math.random() * 200),
+        });
+      }
+
+      // ARCADE: Pixel burst explosion
+      function triggerArcadeEffect(x, y, intensity) {
+        const pixelCount = 8 + Math.floor(intensity * 12);
+        const colors = ['#eeff00', '#ff0055', '#00ff88', '#aa88ff'];
+        for (let i = 0; i < pixelCount; i++) {
+          const angle = (Math.PI * 2 * i) / pixelCount;
+          const speed = 150 + Math.random() * 200;
+          activeEffects.push({
+            type: 'arcade-pixel',
+            startTime: performance.now(),
+            duration: 400 + Math.random() * 200,
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            size: 8 + Math.random() * 8,
+            color: colors[Math.floor(Math.random() * colors.length)],
+          });
+        }
+      }
+
+      // SYNTH: Audio waveform bars
+      function triggerSynthEffect(x, y, intensity) {
+        const barCount = 12 + Math.floor(intensity * 8);
+        const barWidth = fxCanvas.width / barCount;
+        for (let i = 0; i < barCount; i++) {
+          const distFromClick = Math.abs((i * barWidth + barWidth / 2) - x);
+          const maxDist = fxCanvas.width / 2;
+          const proximity = 1 - Math.min(distFromClick / maxDist, 1);
+          activeEffects.push({
+            type: 'synth-bar',
+            startTime: performance.now(),
+            duration: 300 + proximity * 200,
+            x: i * barWidth,
+            width: barWidth - 2,
+            maxHeight: (50 + proximity * 150) * (0.5 + intensity * 0.5),
+            delay: distFromClick / 800,
+          });
+        }
+      }
+
+      // BRUTAL: Geometric X slash
+      function triggerBrutalEffect(x, y, intensity) {
+        const size = 60 + intensity * 80;
+        activeEffects.push({
+          type: 'brutal-x',
+          startTime: performance.now(),
+          duration: 300,
+          x: x,
+          y: y,
+          size: size,
+        });
+        // Add impact circle
+        activeEffects.push({
+          type: 'brutal-circle',
+          startTime: performance.now(),
+          duration: 250,
+          x: x,
+          y: y,
+          maxRadius: size * 0.8,
+        });
+      }
+
+      // BLOOM: Floating petals and hearts
+      function triggerBloomEffect(x, y, intensity) {
+        const count = 6 + Math.floor(intensity * 8);
+        const now = performance.now();
+        for (let i = 0; i < count; i++) {
+          const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+          const speed = 80 + Math.random() * 120;
+          activeEffects.push({
+            type: 'bloom-petal',
+            startTime: now,
+            duration: 800 + Math.random() * 400,
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 50, // Float upward
+            rotation: Math.random() * 360,
+            rotSpeed: (Math.random() - 0.5) * 400,
+            size: 8 + Math.random() * 8,
+            hue: Math.random() > 0.5 ? 340 : 140, // Pink or green
+          });
+        }
+        // Add sparkles
+        for (let i = 0; i < 4; i++) {
+          activeEffects.push({
+            type: 'bloom-sparkle',
+            startTime: now,
+            duration: 400 + Math.random() * 200,
+            x: x + (Math.random() - 0.5) * 60,
+            y: y + (Math.random() - 0.5) * 60,
+            size: 3 + Math.random() * 4,
+          });
+        }
+      }
+
+      // Render all active effects (called from unified animation loop)
+      function renderFxEffectsFrame(now) {
+        fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+
+        for (let i = activeEffects.length - 1; i >= 0; i--) {
+          const fx = activeEffects[i];
+          const elapsed = now - fx.startTime - (fx.delay || 0);
+          if (elapsed < 0) continue;
+          const progress = Math.min(elapsed / fx.duration, 1);
+
+          if (progress >= 1) {
+            activeEffects.splice(i, 1);
+            continue;
+          }
+
+          switch (fx.type) {
+            case 'cyber-glitch':
+              fxCtx.fillStyle = fx.color;
+              fxCtx.globalAlpha = (1 - progress) * 0.8;
+              fxCtx.fillRect(
+                (fx.offset + Math.random() * 10) | 0,
+                (fx.y + Math.random() * 3) | 0,
+                (fx.width * (1 - progress * 0.5)) | 0,
+                fx.height | 0
+              );
+              break;
+
+            case 'cyber-scan':
+              const scanY = (fx.y + fx.speed * (elapsed / 1000)) | 0;
+              fxCtx.strokeStyle = '#00ffff';
+              fxCtx.globalAlpha = (1 - progress) * 0.5;
+              fxCtx.lineWidth = 1;
+              fxCtx.beginPath();
+              fxCtx.moveTo(0, scanY);
+              fxCtx.lineTo(fxCanvas.width, scanY);
+              fxCtx.stroke();
+              break;
+
+            case 'arcade-pixel':
+              const t = elapsed / 1000;
+              const px = (fx.x + fx.vx * t) | 0;
+              const py = (fx.y + fx.vy * t + t * t * 400) | 0;
+              const size = fx.size | 0;
+              fxCtx.fillStyle = fx.color;
+              fxCtx.globalAlpha = 1 - progress;
+              fxCtx.fillRect(px - (size >> 1), py - (size >> 1), size, size);
+              break;
+
+            case 'synth-bar':
+              const wave = Math.sin(progress * Math.PI);
+              const barHeight = (fx.maxHeight * wave) | 0;
+              fxCtx.fillStyle = getSynthGradient(barHeight);
+              fxCtx.globalAlpha = (1 - progress * 0.5) * 0.7;
+              fxCtx.fillRect(fx.x | 0, fxCanvas.height - barHeight, fx.width | 0, barHeight);
+              break;
+
+            case 'brutal-x':
+              const xSize = (fx.size * (0.3 + progress * 0.7)) | 0;
+              const halfSize = xSize >> 1;
+              fxCtx.strokeStyle = '#ff0000';
+              fxCtx.globalAlpha = 1 - progress;
+              fxCtx.lineWidth = (6 + (1 - progress) * 4) | 0;
+              fxCtx.lineCap = 'square';
+              fxCtx.beginPath();
+              fxCtx.moveTo(fx.x - halfSize, fx.y - halfSize);
+              fxCtx.lineTo(fx.x + halfSize, fx.y + halfSize);
+              fxCtx.moveTo(fx.x + halfSize, fx.y - halfSize);
+              fxCtx.lineTo(fx.x - halfSize, fx.y + halfSize);
+              fxCtx.stroke();
+              break;
+
+            case 'brutal-circle':
+              const radius = (fx.maxRadius * progress) | 0;
+              fxCtx.strokeStyle = '#000000';
+              fxCtx.globalAlpha = (1 - progress) * 0.8;
+              fxCtx.lineWidth = 4;
+              fxCtx.beginPath();
+              fxCtx.arc(fx.x | 0, fx.y | 0, radius, 0, Math.PI * 2);
+              fxCtx.stroke();
+              break;
+
+            case 'bloom-petal':
+              const pt = elapsed / 1000;
+              const petalX = (fx.x + fx.vx * pt) | 0;
+              const petalY = (fx.y + fx.vy * pt - pt * 30) | 0; // Float up
+              const rot = (fx.rotation + fx.rotSpeed * pt) * Math.PI / 180;
+              fxCtx.save();
+              fxCtx.translate(petalX, petalY);
+              fxCtx.rotate(rot);
+              fxCtx.globalAlpha = 1 - progress;
+              // Draw petal/heart shape
+              fxCtx.fillStyle = `hsl(${fx.hue}, 70%, 70%)`;
+              fxCtx.beginPath();
+              const ps = fx.size * (1 - progress * 0.3);
+              // Heart shape
+              fxCtx.moveTo(0, ps * 0.3);
+              fxCtx.bezierCurveTo(-ps * 0.5, -ps * 0.3, -ps, ps * 0.3, 0, ps);
+              fxCtx.bezierCurveTo(ps, ps * 0.3, ps * 0.5, -ps * 0.3, 0, ps * 0.3);
+              fxCtx.fill();
+              fxCtx.restore();
+              break;
+
+            case 'bloom-sparkle':
+              const sparkleSize = fx.size * (1 - progress);
+              const sparkleAlpha = (1 - progress) * Math.sin(progress * Math.PI * 3);
+              fxCtx.fillStyle = '#fff';
+              fxCtx.globalAlpha = Math.max(0, sparkleAlpha);
+              fxCtx.beginPath();
+              // 4-point star
+              const sx = fx.x | 0, sy = fx.y | 0;
+              fxCtx.moveTo(sx, sy - sparkleSize);
+              fxCtx.lineTo(sx + sparkleSize * 0.3, sy);
+              fxCtx.lineTo(sx, sy + sparkleSize);
+              fxCtx.lineTo(sx - sparkleSize * 0.3, sy);
+              fxCtx.closePath();
+              fxCtx.fill();
+              fxCtx.beginPath();
+              fxCtx.moveTo(sx - sparkleSize, sy);
+              fxCtx.lineTo(sx, sy + sparkleSize * 0.3);
+              fxCtx.lineTo(sx + sparkleSize, sy);
+              fxCtx.lineTo(sx, sy - sparkleSize * 0.3);
+              fxCtx.closePath();
+              fxCtx.fill();
+              break;
+          }
+        }
+
+        fxCtx.globalAlpha = 1;
+      }
+
+      // Trigger effect based on current theme
+      function triggerThemeEffect(x, y, crit) {
+        const theme = CONFIG.THEMES[currentThemeIndex];
+        const intensity = Math.min(S.combo / 20, 1) * (crit ? 1.5 : 1);
+
+        switch (theme) {
+          case 'cyber':
+            triggerCyberEffect(x, y, intensity);
+            break;
+          case 'arcade':
+            triggerArcadeEffect(x, y, intensity);
+            break;
+          case 'synth':
+            triggerSynthEffect(x, y, intensity);
+            break;
+          case 'brutal':
+            triggerBrutalEffect(x, y, intensity);
+            break;
+          case 'bloom':
+            triggerBloomEffect(x, y, intensity);
+            break;
+        }
+
+        startAnimationLoop();
+      }
 
       // Initialize best display
       bestEl.textContent = S.best;
 
-      // Object pools for DOM elements
-      const hitPool = [];
-      const ringPool = [];
-      const POOL_SIZE = 30;
+      // ===========================================
+      // THEME SYSTEM
+      // ===========================================
+      let currentThemeIndex = CONFIG.THEMES.indexOf(safeGetItem(CONFIG.STORAGE_KEY_THEME, 'cyber'));
+      if (currentThemeIndex === -1) currentThemeIndex = 0;
+      document.body.setAttribute('data-theme', CONFIG.THEMES[currentThemeIndex]);
+      themeBtn.textContent = CONFIG.THEMES[currentThemeIndex];
 
-      // Pre-create pooled elements
-      for (let i = 0; i < POOL_SIZE; i++) {
+      function cycleTheme(e) {
+        e.stopPropagation();
+        currentThemeIndex = (currentThemeIndex + 1) % CONFIG.THEMES.length;
+        const theme = CONFIG.THEMES[currentThemeIndex];
+        document.body.setAttribute('data-theme', theme);
+        safeSetItem(CONFIG.STORAGE_KEY_THEME, theme);
+        themeBtn.textContent = theme;
+      }
+
+      themeBtn.addEventListener('click', cycleTheme);
+
+      // ===========================================
+      // AMBIENT MODE
+      // ===========================================
+      let ambientMode = safeGetItem(CONFIG.STORAGE_KEY_AMBIENT) === 'true';
+      if (ambientMode) {
+        document.body.setAttribute('data-ambient', 'true');
+        ambientBtn.classList.add('on');
+      }
+
+      function toggleAmbient(e) {
+        e.stopPropagation();
+        ambientMode = !ambientMode;
+        document.body.setAttribute('data-ambient', ambientMode);
+        safeSetItem(CONFIG.STORAGE_KEY_AMBIENT, ambientMode);
+        ambientBtn.classList.toggle('on', ambientMode);
+      }
+
+      ambientBtn.addEventListener('click', toggleAmbient);
+
+      function getComboWindow() {
+        return ambientMode ? CONFIG.AMBIENT_COMBO_WINDOW_MS : CONFIG.COMBO_WINDOW_MS;
+      }
+
+      function getComboDecay() {
+        return ambientMode ? CONFIG.AMBIENT_COMBO_DECAY_MS : CONFIG.COMBO_DECAY_MS;
+      }
+
+      // ===========================================
+      // OBJECT POOLS (Optimized with free list for O(1) lookup)
+      // ===========================================
+      const POOL_SIZE = 30;
+      const PARTICLE_POOL_SIZE = 50;
+      const TRAIL_POOL_SIZE = 20;
+
+      // Pool structure with free list
+      function createPool(size, poolType, createElement) {
+        const elements = [];
+        const freeList = [];
+        const inUse = new Set(); // Track which indices are in use
+        for (let i = 0; i < size; i++) {
+          const el = createElement();
+          el._poolIndex = i;
+          el._poolType = poolType;
+          elements.push(el);
+          freeList.push(i);
+        }
+        return { elements, freeList, inUse };
+      }
+
+      const hitPool = createPool(POOL_SIZE, 'hit', () => {
         const hit = document.createElement('div');
         hit.className = 'hit norm';
         hit.style.display = 'none';
-        document.body.appendChild(hit);
-        hitPool.push(hit);
+        shakeContainer.appendChild(hit);
+        return hit;
+      });
 
+      const ringPool = createPool(POOL_SIZE, 'ring', () => {
         const ring = document.createElement('div');
         ring.className = 'ring';
         ring.style.display = 'none';
-        document.body.appendChild(ring);
-        ringPool.push(ring);
-      }
+        shakeContainer.appendChild(ring);
+        return ring;
+      });
 
-      function getPooledHit() {
-        for (const el of hitPool) {
-          if (el.style.display === 'none') return el;
+      const particlePool = createPool(PARTICLE_POOL_SIZE, 'particle', () => {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.display = 'none';
+        shakeContainer.appendChild(particle);
+        return particle;
+      });
+
+      const trailPool = createPool(TRAIL_POOL_SIZE, 'trail', () => {
+        const trail = document.createElement('div');
+        trail.className = 'trail';
+        trail.style.display = 'none';
+        shakeContainer.appendChild(trail);
+        return trail;
+      });
+
+      // Pool lookup by type
+      const poolsByType = { hit: hitPool, ring: ringPool, particle: particlePool, trail: trailPool };
+
+      // O(1) pool operations
+      function getPooled(pool) {
+        if (pool.freeList.length > 0) {
+          const idx = pool.freeList.pop();
+          pool.inUse.add(idx);
+          return pool.elements[idx];
         }
-        return hitPool[0]; // Reuse oldest if all in use
+        // Fallback: reuse oldest element
+        return pool.elements[0];
       }
 
-      function getPooledRing() {
-        for (const el of ringPool) {
-          if (el.style.display === 'none') return el;
+      function release(el) {
+        el.style.display = 'none';
+        const pool = poolsByType[el._poolType];
+        if (pool && pool.inUse.has(el._poolIndex)) {
+          pool.inUse.delete(el._poolIndex);
+          pool.freeList.push(el._poolIndex);
         }
-        return ringPool[0]; // Reuse oldest if all in use
       }
 
-      function releaseHit(el) {
-        el.style.display = 'none';
-        el.classList.remove('crit', 'norm');
-      }
-
-      function releaseRing(el) {
-        el.style.display = 'none';
-      }
-
-      // Audio system
+      // ===========================================
+      // AUDIO SYSTEM (Theme-specific pre-baked sounds)
+      // ===========================================
       let audioCtx = null;
-      let soundEnabled = false;
+      let soundEnabled = safeGetItem(CONFIG.STORAGE_KEY_SOUND) === 'true';
       const soundToggle = $('sound-toggle');
 
+      // Pre-baked audio buffers per theme
+      const audioBuffers = {
+        cyber: { tap: null, crit: null, milestone: null },
+        arcade: { tap: null, crit: null, milestone: null },
+        synth: { tap: null, crit: null, milestone: null },
+        brutal: { tap: null, crit: null, milestone: null },
+        bloom: { tap: null, crit: null, milestone: null }
+      };
+      let audioBuffersReady = false;
+
+      if (soundEnabled) {
+        soundToggle.textContent = 'sound: on';
+        soundToggle.classList.add('on');
+        soundToggle.setAttribute('aria-pressed', 'true');
+      }
+
       function getAudioCtx() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          bakeAllThemeSounds();
+        }
         return audioCtx;
+      }
+
+      // Bake all theme sounds
+      async function bakeAllThemeSounds() {
+        if (audioBuffersReady) return;
+        const sr = 44100;
+
+        // === CYBER: Digital zaps, glitchy ===
+        // Tap: Sharp sawtooth zap
+        let ctx = new OfflineAudioContext(1, sr * 0.08, sr);
+        let o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(1200, 0);
+        o.frequency.exponentialRampToValueAtTime(400, 0.08);
+        g.gain.setValueAtTime(0.25, 0);
+        g.gain.exponentialRampToValueAtTime(0.001, 0.08);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(0); o.stop(0.08);
+        let o2 = ctx.createOscillator(), g2 = ctx.createGain();
+        o2.type = 'square';
+        o2.frequency.setValueAtTime(2400, 0);
+        o2.frequency.setValueAtTime(1800, 0.015);
+        g2.gain.setValueAtTime(0.1, 0);
+        g2.gain.exponentialRampToValueAtTime(0.001, 0.03);
+        o2.connect(g2); g2.connect(ctx.destination);
+        o2.start(0); o2.stop(0.03);
+        audioBuffers.cyber.tap = await ctx.startRendering();
+
+        // Crit: Power surge with glitch
+        ctx = new OfflineAudioContext(1, sr * 0.2, sr);
+        o = ctx.createOscillator(); g = ctx.createGain();
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(80, 0);
+        o.frequency.exponentialRampToValueAtTime(40, 0.2);
+        g.gain.setValueAtTime(0.4, 0);
+        g.gain.exponentialRampToValueAtTime(0.001, 0.2);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(0); o.stop(0.2);
+        o2 = ctx.createOscillator(); g2 = ctx.createGain();
+        o2.type = 'square';
+        o2.frequency.setValueAtTime(3000, 0);
+        o2.frequency.setValueAtTime(1500, 0.025);
+        o2.frequency.setValueAtTime(4000, 0.05);
+        g2.gain.setValueAtTime(0.15, 0);
+        g2.gain.exponentialRampToValueAtTime(0.001, 0.1);
+        o2.connect(g2); g2.connect(ctx.destination);
+        o2.start(0); o2.stop(0.1);
+        audioBuffers.cyber.crit = await ctx.startRendering();
+
+        // Milestone: Digital arpeggio
+        ctx = new OfflineAudioContext(1, sr * 0.3, sr);
+        [880, 1320, 1760].forEach((f, i) => {
+          const osc = ctx.createOscillator(), gn = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.value = f;
+          gn.gain.setValueAtTime(0, i * 0.05);
+          gn.gain.linearRampToValueAtTime(0.12, i * 0.05 + 0.01);
+          gn.gain.exponentialRampToValueAtTime(0.001, i * 0.05 + 0.15);
+          osc.connect(gn); gn.connect(ctx.destination);
+          osc.start(i * 0.05); osc.stop(i * 0.05 + 0.15);
+        });
+        audioBuffers.cyber.milestone = await ctx.startRendering();
+
+        // === ARCADE: 8-bit chiptune ===
+        // Tap: Classic square blip
+        ctx = new OfflineAudioContext(1, sr * 0.06, sr);
+        o = ctx.createOscillator(); g = ctx.createGain();
+        o.type = 'square';
+        o.frequency.setValueAtTime(880, 0);
+        o.frequency.setValueAtTime(660, 0.02);
+        o.frequency.setValueAtTime(440, 0.04);
+        g.gain.setValueAtTime(0.25, 0);
+        g.gain.exponentialRampToValueAtTime(0.001, 0.06);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(0); o.stop(0.06);
+        audioBuffers.arcade.tap = await ctx.startRendering();
+
+        // Crit: Power-up arpeggio
+        ctx = new OfflineAudioContext(1, sr * 0.2, sr);
+        [220, 330, 440, 550, 660].forEach((f, i) => {
+          const osc = ctx.createOscillator(), gn = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.value = f;
+          gn.gain.setValueAtTime(0, i * 0.025);
+          gn.gain.linearRampToValueAtTime(0.2, i * 0.025 + 0.005);
+          gn.gain.exponentialRampToValueAtTime(0.001, i * 0.025 + 0.08);
+          osc.connect(gn); gn.connect(ctx.destination);
+          osc.start(i * 0.025); osc.stop(i * 0.025 + 0.08);
+        });
+        audioBuffers.arcade.crit = await ctx.startRendering();
+
+        // Milestone: Victory fanfare
+        ctx = new OfflineAudioContext(1, sr * 0.4, sr);
+        [523, 659, 784, 1047].forEach((f, i) => {
+          const osc = ctx.createOscillator(), gn = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.value = f;
+          gn.gain.setValueAtTime(0, i * 0.08);
+          gn.gain.linearRampToValueAtTime(0.18, i * 0.08 + 0.01);
+          gn.gain.exponentialRampToValueAtTime(0.001, i * 0.08 + 0.12);
+          osc.connect(gn); gn.connect(ctx.destination);
+          osc.start(i * 0.08); osc.stop(i * 0.08 + 0.12);
+        });
+        audioBuffers.arcade.milestone = await ctx.startRendering();
+
+        // === SYNTH: Warm analog, filtered ===
+        // Tap: Filtered saw pluck
+        ctx = new OfflineAudioContext(1, sr * 0.1, sr);
+        o = ctx.createOscillator(); g = ctx.createGain();
+        const f1 = ctx.createBiquadFilter();
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(440, 0);
+        o.frequency.exponentialRampToValueAtTime(220, 0.1);
+        f1.type = 'lowpass';
+        f1.frequency.setValueAtTime(3000, 0);
+        f1.frequency.exponentialRampToValueAtTime(400, 0.1);
+        f1.Q.value = 3;
+        g.gain.setValueAtTime(0.3, 0);
+        g.gain.exponentialRampToValueAtTime(0.001, 0.1);
+        o.connect(f1); f1.connect(g); g.connect(ctx.destination);
+        o.start(0); o.stop(0.1);
+        audioBuffers.synth.tap = await ctx.startRendering();
+
+        // Crit: Bass drop with filter sweep
+        ctx = new OfflineAudioContext(1, sr * 0.25, sr);
+        o = ctx.createOscillator(); g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(100, 0);
+        o.frequency.exponentialRampToValueAtTime(45, 0.25);
+        g.gain.setValueAtTime(0.5, 0);
+        g.gain.exponentialRampToValueAtTime(0.001, 0.25);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(0); o.stop(0.25);
+        o2 = ctx.createOscillator(); g2 = ctx.createGain();
+        const f2 = ctx.createBiquadFilter();
+        o2.type = 'sawtooth';
+        o2.frequency.setValueAtTime(200, 0);
+        o2.frequency.exponentialRampToValueAtTime(80, 0.25);
+        f2.type = 'lowpass';
+        f2.frequency.setValueAtTime(4000, 0);
+        f2.frequency.exponentialRampToValueAtTime(150, 0.25);
+        f2.Q.value = 6;
+        g2.gain.setValueAtTime(0.25, 0);
+        g2.gain.exponentialRampToValueAtTime(0.001, 0.25);
+        o2.connect(f2); f2.connect(g2); g2.connect(ctx.destination);
+        o2.start(0); o2.stop(0.25);
+        audioBuffers.synth.crit = await ctx.startRendering();
+
+        // Milestone: Dreamy chord swell
+        ctx = new OfflineAudioContext(1, sr * 0.5, sr);
+        [261, 329, 392, 523].forEach((freq) => {
+          const osc = ctx.createOscillator(), gn = ctx.createGain();
+          const flt = ctx.createBiquadFilter();
+          osc.type = 'sawtooth';
+          osc.frequency.value = freq;
+          flt.type = 'lowpass';
+          flt.frequency.setValueAtTime(400, 0);
+          flt.frequency.linearRampToValueAtTime(2000, 0.15);
+          flt.frequency.exponentialRampToValueAtTime(250, 0.5);
+          gn.gain.setValueAtTime(0, 0);
+          gn.gain.linearRampToValueAtTime(0.1, 0.1);
+          gn.gain.exponentialRampToValueAtTime(0.001, 0.5);
+          osc.connect(flt); flt.connect(gn); gn.connect(ctx.destination);
+          osc.start(0); osc.stop(0.5);
+        });
+        audioBuffers.synth.milestone = await ctx.startRendering();
+
+        // === BRUTAL: Industrial, heavy ===
+        // Tap: Hard mechanical click
+        ctx = new OfflineAudioContext(1, sr * 0.05, sr);
+        o = ctx.createOscillator(); g = ctx.createGain();
+        o.type = 'square';
+        o.frequency.setValueAtTime(120, 0);
+        o.frequency.exponentialRampToValueAtTime(25, 0.05);
+        g.gain.setValueAtTime(0.5, 0);
+        g.gain.exponentialRampToValueAtTime(0.001, 0.05);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(0); o.stop(0.05);
+        o2 = ctx.createOscillator(); g2 = ctx.createGain();
+        o2.type = 'sawtooth';
+        o2.frequency.value = 60;
+        g2.gain.setValueAtTime(0.35, 0);
+        g2.gain.exponentialRampToValueAtTime(0.001, 0.02);
+        o2.connect(g2); g2.connect(ctx.destination);
+        o2.start(0); o2.stop(0.02);
+        audioBuffers.brutal.tap = await ctx.startRendering();
+
+        // Crit: Heavy industrial slam
+        ctx = new OfflineAudioContext(1, sr * 0.2, sr);
+        o = ctx.createOscillator(); g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(55, 0);
+        o.frequency.exponentialRampToValueAtTime(20, 0.2);
+        g.gain.setValueAtTime(0.6, 0);
+        g.gain.exponentialRampToValueAtTime(0.001, 0.2);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(0); o.stop(0.2);
+        o2 = ctx.createOscillator(); g2 = ctx.createGain();
+        o2.type = 'square';
+        o2.frequency.setValueAtTime(90, 0);
+        o2.frequency.exponentialRampToValueAtTime(35, 0.12);
+        g2.gain.setValueAtTime(0.4, 0);
+        g2.gain.exponentialRampToValueAtTime(0.001, 0.15);
+        o2.connect(g2); g2.connect(ctx.destination);
+        o2.start(0); o2.stop(0.15);
+        audioBuffers.brutal.crit = await ctx.startRendering();
+
+        // Milestone: Aggressive alarm
+        ctx = new OfflineAudioContext(1, sr * 0.3, sr);
+        [180, 220].forEach((freq) => {
+          const osc = ctx.createOscillator(), gn = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.value = freq;
+          gn.gain.setValueAtTime(0, 0);
+          gn.gain.linearRampToValueAtTime(0.25, 0.01);
+          gn.gain.setValueAtTime(0.25, 0.1);
+          gn.gain.linearRampToValueAtTime(0, 0.12);
+          gn.gain.linearRampToValueAtTime(0.25, 0.14);
+          gn.gain.exponentialRampToValueAtTime(0.001, 0.3);
+          osc.connect(gn); gn.connect(ctx.destination);
+          osc.start(0); osc.stop(0.3);
+        });
+        audioBuffers.brutal.milestone = await ctx.startRendering();
+
+        // === BLOOM: Cute, bubbly, soft ===
+        // Tap: Soft bubble pop
+        ctx = new OfflineAudioContext(1, sr * 0.12, sr);
+        o = ctx.createOscillator(); g = ctx.createGain();
+        const bloomFilter = ctx.createBiquadFilter();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(800, 0);
+        o.frequency.exponentialRampToValueAtTime(400, 0.08);
+        bloomFilter.type = 'lowpass';
+        bloomFilter.frequency.value = 2500;
+        bloomFilter.Q.value = 1;
+        g.gain.setValueAtTime(0.3, 0);
+        g.gain.exponentialRampToValueAtTime(0.001, 0.12);
+        o.connect(bloomFilter); bloomFilter.connect(g); g.connect(ctx.destination);
+        o.start(0); o.stop(0.12);
+        // Add soft overtone
+        o2 = ctx.createOscillator(); g2 = ctx.createGain();
+        o2.type = 'sine';
+        o2.frequency.setValueAtTime(1200, 0);
+        o2.frequency.exponentialRampToValueAtTime(600, 0.06);
+        g2.gain.setValueAtTime(0.1, 0);
+        g2.gain.exponentialRampToValueAtTime(0.001, 0.06);
+        o2.connect(g2); g2.connect(ctx.destination);
+        o2.start(0); o2.stop(0.06);
+        audioBuffers.bloom.tap = await ctx.startRendering();
+
+        // Crit: Magical chime burst
+        ctx = new OfflineAudioContext(1, sr * 0.3, sr);
+        [523, 659, 784, 1047].forEach((freq, i) => {
+          const osc = ctx.createOscillator(), gn = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          const delay = i * 0.02;
+          gn.gain.setValueAtTime(0, delay);
+          gn.gain.linearRampToValueAtTime(0.15, delay + 0.01);
+          gn.gain.exponentialRampToValueAtTime(0.001, delay + 0.25);
+          osc.connect(gn); gn.connect(ctx.destination);
+          osc.start(delay); osc.stop(delay + 0.25);
+        });
+        audioBuffers.bloom.crit = await ctx.startRendering();
+
+        // Milestone: Magical sparkle melody
+        ctx = new OfflineAudioContext(1, sr * 0.5, sr);
+        [784, 880, 1047, 1319, 1568].forEach((freq, i) => {
+          const osc = ctx.createOscillator(), gn = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          const delay = i * 0.06;
+          gn.gain.setValueAtTime(0, delay);
+          gn.gain.linearRampToValueAtTime(0.12, delay + 0.02);
+          gn.gain.exponentialRampToValueAtTime(0.001, delay + 0.2);
+          osc.connect(gn); gn.connect(ctx.destination);
+          osc.start(delay); osc.stop(delay + 0.2);
+        });
+        audioBuffers.bloom.milestone = await ctx.startRendering();
+
+        audioBuffersReady = true;
       }
 
       function toggleSound(e) {
         e.stopPropagation();
         soundEnabled = !soundEnabled;
+        safeSetItem(CONFIG.STORAGE_KEY_SOUND, soundEnabled);
         soundToggle.textContent = 'sound: ' + (soundEnabled ? 'on' : 'off');
         soundToggle.classList.toggle('on', soundEnabled);
+        soundToggle.setAttribute('aria-pressed', soundEnabled);
 
-        // Initialize/resume AudioContext on user gesture (required for mobile)
         if (soundEnabled) {
           const ctx = getAudioCtx();
           if (ctx.state === 'suspended') ctx.resume();
@@ -492,13 +1845,88 @@
 
       soundToggle.addEventListener('click', toggleSound);
 
-      // Reset functionality
+      function playBuffer(buffer, volume = 1, playbackRate = 1) {
+        if (!buffer || !audioCtx) return;
+        const source = audioCtx.createBufferSource();
+        const gain = audioCtx.createGain();
+        source.buffer = buffer;
+        source.playbackRate.value = playbackRate;
+        gain.gain.value = volume;
+        source.connect(gain);
+        gain.connect(audioCtx.destination);
+        source.start(0);
+      }
+
+      function getThemeSounds() {
+        return audioBuffers[CONFIG.THEMES[currentThemeIndex]] || audioBuffers.cyber;
+      }
+
+      function playHit(crit, combo) {
+        if (!soundEnabled) return;
+        const ctx = getAudioCtx();
+        const volume = ambientMode ? 0.6 : 1;
+        const sounds = getThemeSounds();
+
+        if (audioBuffersReady && sounds.tap) {
+          if (crit) {
+            playBuffer(sounds.crit, volume);
+          } else {
+            const pitchMult = 1 + combo * 0.01;
+            playBuffer(sounds.tap, volume, pitchMult);
+          }
+        } else {
+          // Fallback while baking
+          const now = ctx.currentTime;
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.type = crit ? 'square' : 'triangle';
+          o.frequency.setValueAtTime(crit ? 120 : 600, now);
+          o.frequency.exponentialRampToValueAtTime(crit ? 40 : 300, now + 0.08);
+          g.gain.setValueAtTime(0.3 * volume, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          o.connect(g); g.connect(ctx.destination);
+          o.start(now); o.stop(now + 0.08);
+        }
+      }
+
+      function playMilestoneSound() {
+        if (!soundEnabled) return;
+        const ctx = getAudioCtx();
+        const volume = ambientMode ? 0.5 : 1;
+        const sounds = getThemeSounds();
+
+        if (audioBuffersReady && sounds.milestone) {
+          playBuffer(sounds.milestone, volume);
+        } else {
+          const now = ctx.currentTime;
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.type = 'sine';
+          o.frequency.value = 660;
+          g.gain.setValueAtTime(0.2 * volume, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+          o.connect(g); g.connect(ctx.destination);
+          o.start(now); o.stop(now + 0.2);
+        }
+      }
+
+      // ===========================================
+      // RESET FUNCTIONALITY
+      // ===========================================
       const resetBtn = $('reset-btn');
+      const modalOverlay = $('modal-overlay');
+      const modalConfirm = $('modal-confirm');
+      const modalCancel = $('modal-cancel');
 
-      function resetGame(e) {
+      function showResetModal(e) {
         e.stopPropagation();
-        if (!confirm('Reset all stats and high score?')) return;
+        modalOverlay.classList.add('show');
+        modalConfirm.focus();
+      }
 
+      function hideModal() {
+        modalOverlay.classList.remove('show');
+      }
+
+      function confirmReset() {
         S.combo = 0;
         S.last = 0;
         S.log = [];
@@ -506,63 +1934,158 @@
         S.dmg = 0;
         S.crits = 0;
         S.best = 0;
-        localStorage.removeItem('clickdps-best');
+        S.lastMilestoneDmg = 0;
+        S.lastMilestoneDps = 0;
+        safeRemoveItem(CONFIG.STORAGE_KEY_BEST);
         bestEl.textContent = '0';
         hint.classList.remove('hidden');
+        hideModal();
         render();
       }
 
-      resetBtn.addEventListener('click', resetGame);
+      resetBtn.addEventListener('click', showResetModal);
+      modalConfirm.addEventListener('click', (e) => { e.stopPropagation(); confirmReset(); });
+      modalCancel.addEventListener('click', (e) => { e.stopPropagation(); hideModal(); });
+      modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) hideModal(); });
 
-      function playHit(crit, combo) {
-        if (!soundEnabled) return;
-        const ctx = getAudioCtx();
-        const now = ctx.currentTime;
+      // ===========================================
+      // PARTICLE SYSTEM
+      // ===========================================
+      function spawnParticles(x, y, count, color) {
+        const now = performance.now();
+        for (let i = 0; i < count; i++) {
+          const particle = getPooled(particlePool);
+          const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+          const velocity = 100 + Math.random() * 150;
 
-        // Create oscillator
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
+          particle.style.left = x + 'px';
+          particle.style.top = y + 'px';
+          particle.style.background = color || 'var(--color-accent)';
+          particle.style.display = 'block';
+          particle.style.opacity = '1';
+          particle.style.transform = 'translateZ(0) scale(1)';
 
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
+          // Add to unified animation system
+          animations.particles.push({
+            el: particle,
+            startTime: now,
+            duration: 500 + Math.random() * 300,
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * velocity,
+            vy: Math.sin(angle) * velocity
+          });
+        }
+        startAnimationLoop();
+      }
 
-        if (crit) {
-          // Crit: punchy low hit with distortion feel
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(80 + Math.random() * 20, now);
-          osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
-          filter.type = 'lowpass';
-          filter.frequency.setValueAtTime(800, now);
-          filter.frequency.exponentialRampToValueAtTime(100, now + 0.1);
-          gain.gain.setValueAtTime(0.4, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-          osc.start(now);
-          osc.stop(now + 0.15);
-        } else {
-          // Normal: quick snappy tick, pitch increases with combo
-          const baseFreq = 400 + combo * 8 + Math.random() * 50;
-          osc.type = 'square';
-          osc.frequency.setValueAtTime(baseFreq, now);
-          osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.5, now + 0.05);
-          filter.type = 'highpass';
-          filter.frequency.setValueAtTime(200, now);
-          gain.gain.setValueAtTime(0.15, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
-          osc.start(now);
-          osc.stop(now + 0.05);
+      function spawnMilestoneParticles(x, y) {
+        spawnParticles(x, y, CONFIG.PARTICLE_COUNT * 2, 'var(--color-success)');
+        spawnParticles(x, y, CONFIG.PARTICLE_COUNT, 'var(--color-accent)');
+      }
+
+      // ===========================================
+      // CURSOR TRAIL
+      // ===========================================
+      let lastTrailTime = 0;
+
+      function updateTrail(x, y) {
+        const now = performance.now();
+        if (now - lastTrailTime < 30) return; // Throttle
+        lastTrailTime = now;
+
+        if (S.combo < 5) return; // Only show trail at higher combos
+
+        const trail = getPooled(trailPool);
+        trail.style.left = x + 'px';
+        trail.style.top = y + 'px';
+        trail.style.display = 'block';
+        trail.style.opacity = '0.6';
+        trail.style.transform = 'translate(-50%, -50%) translateZ(0) scale(1)';
+
+        const intensity = Math.min(S.combo / 30, 1);
+        const size = (6 + intensity * 6) | 0;
+        trail.style.width = size + 'px';
+        trail.style.height = size + 'px';
+
+        // Add to unified animation system
+        animations.trails.push({
+          el: trail,
+          startTime: now,
+          duration: ambientMode ? 400 : 200
+        });
+        startAnimationLoop();
+      }
+
+      document.addEventListener('mousemove', (e) => {
+        S.mouseX = e.clientX;
+        S.mouseY = e.clientY;
+        updateTrail(e.clientX, e.clientY);
+      });
+
+      // ===========================================
+      // SCREEN SHAKE
+      // ===========================================
+      function applyScreenShake() {
+        if (S.shakeIntensity < 0.1) {
+          shakeContainer.style.transform = '';
+          return;
+        }
+
+        const shakeX = (Math.random() - 0.5) * S.shakeIntensity * 2;
+        const shakeY = (Math.random() - 0.5) * S.shakeIntensity * 2;
+        shakeContainer.style.transform = `translate(${shakeX}px, ${shakeY}px)`;
+
+        S.shakeIntensity *= CONFIG.SHAKE_DECAY;
+      }
+
+      // ===========================================
+      // MILESTONES
+      // ===========================================
+      function checkMilestones(damage, dpsValue) {
+        // Check damage milestones
+        for (const milestone of CONFIG.DAMAGE_MILESTONES) {
+          if (S.dmg >= milestone && S.lastMilestoneDmg < milestone) {
+            S.lastMilestoneDmg = milestone;
+            triggerMilestone(`${(milestone / 1000).toFixed(0)}K DMG!`);
+            return;
+          }
+        }
+
+        // Check DPS milestones
+        for (const milestone of CONFIG.DPS_MILESTONES) {
+          if (dpsValue >= milestone && S.lastMilestoneDps < milestone) {
+            S.lastMilestoneDps = milestone;
+            triggerMilestone(`${milestone} DPS!`);
+            return;
+          }
         }
       }
 
+      function triggerMilestone(text) {
+        milestoneEl.textContent = text;
+        milestoneEl.classList.remove('show');
+        void milestoneEl.offsetWidth;
+        milestoneEl.classList.add('show');
+
+        edgeGlow.classList.remove('pulse');
+        void edgeGlow.offsetWidth;
+        edgeGlow.classList.add('pulse');
+
+        spawnMilestoneParticles(window.innerWidth / 2, window.innerHeight / 2);
+        playMilestoneSound();
+      }
+
+      // ===========================================
+      // MAIN SMASH FUNCTION
+      // ===========================================
       function smash(x, y) {
         const now = performance.now();
 
-        // Hide hint on first click
         if (S.hits === 0) hint.classList.add('hidden');
 
         // Combo
-        S.combo = (now - S.last < CONFIG.COMBO_WINDOW_MS) ? Math.min(S.combo + 1, CONFIG.MAX_COMBO) : 0;
+        S.combo = (now - S.last < getComboWindow()) ? Math.min(S.combo + 1, CONFIG.MAX_COMBO) : 0;
         S.last = now;
 
         // Crit
@@ -580,97 +2103,176 @@
         // Sound
         playHit(crit, S.combo);
 
-        // Popup (using object pool)
-        const el = getPooledHit();
+        // Haptic feedback
+        if (navigator.vibrate) {
+          navigator.vibrate(crit ? 20 : 10);
+        }
+
+        // Screen shake (scales with combo)
+        const shakeAmount = ambientMode ? 1 : Math.min(2 + S.combo * 0.15, CONFIG.MAX_SHAKE);
+        S.shakeIntensity = Math.max(S.shakeIntensity, crit ? shakeAmount * 1.5 : shakeAmount);
+
+        // Spawn particles on crits
+        if (crit) {
+          spawnParticles(x, y, CONFIG.PARTICLE_COUNT, 'var(--color-accent)');
+        }
+
+        // Trigger theme-specific visual effect
+        triggerThemeEffect(x, y, crit);
+
+        // Get pooled elements
+        const el = getPooled(hitPool);
+        const ring = getPooled(ringPool);
+
         el.className = `hit ${crit ? 'crit' : 'norm'}`;
         el.textContent = d;
         el.style.left = (x + (Math.random() - 0.5) * 20) + 'px';
         el.style.top = (y - 10) + 'px';
         el.style.display = 'block';
         el.style.animation = 'none';
-        el.offsetHeight; // Trigger reflow
-        el.style.animation = '';
-        setTimeout(() => releaseHit(el), crit ? 700 : 500);
 
-        // Ring (using object pool)
-        const ring = getPooledRing();
         ring.style.left = x + 'px';
         ring.style.top = y + 'px';
         ring.style.display = 'block';
         ring.style.animation = 'none';
-        ring.offsetHeight; // Trigger reflow
-        ring.style.animation = '';
-        setTimeout(() => releaseRing(ring), 300);
 
-        // Crit flash
         if (crit) {
           flash.classList.remove('on');
-          void flash.offsetWidth;
-          flash.classList.add('on');
         }
 
-        // Log
+        requestAnimationFrame(() => {
+          void el.offsetHeight;
+          el.style.animation = '';
+          ring.style.animation = '';
+          if (crit) {
+            flash.classList.add('on');
+          }
+        });
+
+        const hitDuration = ambientMode ? (crit ? 1200 : 1000) : (crit ? 700 : 500);
+        const ringDuration = ambientMode ? 600 : 300;
+        setTimeout(() => release(el), hitDuration);
+        setTimeout(() => release(ring), ringDuration);
+
         S.log.push({ t: now, d });
 
         render();
       }
 
+      // ===========================================
+      // RENDER
+      // ===========================================
       function render() {
         const now = performance.now();
         S.log = S.log.filter(e => e.t > now - CONFIG.DPS_WINDOW_MS);
 
         const total = S.log.reduce((a, e) => a + e.d, 0);
+        const prevTotal = parseInt(dps.dataset.value || '0');
         dps.textContent = total;
         dps.dataset.value = total;
+
+        // DPS pulse effect
+        if (total > prevTotal + 50) {
+          dps.classList.remove('pulse', 'big-pulse');
+          void dps.offsetWidth;
+          dps.classList.add(total > prevTotal + 200 ? 'big-pulse' : 'pulse');
+        }
 
         // Check for new best
         if (total > S.best) {
           S.best = total;
-          localStorage.setItem('clickdps-best', S.best);
+          safeSetItem(CONFIG.STORAGE_KEY_BEST, S.best);
           bestEl.textContent = S.best;
 
-          // Show new record notification
           newBestEl.classList.remove('show');
           void newBestEl.offsetWidth;
           newBestEl.classList.add('show');
         }
 
-        // Combo display
+        // Check milestones
+        checkMilestones(S.dmg, total);
+
+        // Combo display with scale effect
         if (S.combo > 3) {
-          combo.textContent = S.combo + 'x';
-          combo.classList.add('visible');
+          comboEl.textContent = S.combo + 'x';
+          comboEl.classList.add('visible');
+          const comboScale = 1 + Math.min(S.combo / 50, 0.5);
+          comboEl.style.transform = `scale(${comboScale})`;
         } else {
-          combo.classList.remove('visible');
+          comboEl.classList.remove('visible');
+          comboEl.style.transform = '';
         }
 
         // Intensity bar
         const int = Math.min(S.log.length / CONFIG.INTENSITY_BAR_MAX_HITS, 1);
         bar.style.width = (int * 100) + '%';
 
+        // Intensity glow (scales with combo)
+        const glowIntensity = Math.min(S.combo / 30, 0.6);
+        intensityGlow.style.opacity = glowIntensity;
+
+        // Grid pulse (background scales slightly with intensity)
+        const gridScale = 1 + int * 0.02;
+        gridBg.style.transform = `scale(${gridScale})`;
+        gridBg.style.opacity = 0.3 + int * 0.4;
+
+        // Color temperature shift (warm up accent as combo builds)
+        // This is handled via the intensity glow getting more prominent
+
         // Stats
         $('s-hits').textContent = S.hits;
         $('s-dmg').textContent = S.dmg.toLocaleString();
       }
 
+      // ===========================================
+      // GAME LOOP
+      // ===========================================
       function tick() {
-        if (performance.now() - S.last > CONFIG.COMBO_DECAY_MS && S.combo > 0) {
+        if (performance.now() - S.last > getComboDecay() && S.combo > 0) {
           S.combo = Math.max(0, S.combo - 1);
         }
+        applyScreenShake();
         render();
       }
 
+      // ===========================================
+      // EVENT LISTENERS
+      // ===========================================
+      const buttons = [soundToggle, resetBtn, themeBtn, ambientBtn];
+
       document.addEventListener('click', e => {
-        if (e.target === soundToggle || e.target === resetBtn) return;
+        if (buttons.includes(e.target) || modalOverlay.classList.contains('show')) return;
         smash(e.clientX, e.clientY);
       });
+
       document.addEventListener('touchstart', e => {
-        // Allow buttons to work normally
-        if (e.target === soundToggle || e.target === resetBtn) return;
+        if (buttons.includes(e.target) || modalOverlay.contains(e.target)) return;
+        if (modalOverlay.classList.contains('show')) return;
         e.preventDefault();
         for (const t of e.touches) smash(t.clientX, t.clientY);
       }, { passive: false });
 
-      // Game loop with visibility handling
+      document.addEventListener('keydown', e => {
+        if (modalOverlay.classList.contains('show')) {
+          if (e.key === 'Escape') {
+            hideModal();
+            e.preventDefault();
+          }
+          return;
+        }
+
+        if (e.key === ' ' || e.key === 'Enter') {
+          if (e.target.tagName === 'BUTTON') return;
+          e.preventDefault();
+          const centerX = window.innerWidth / 2;
+          const centerY = window.innerHeight / 2;
+          smash(centerX, centerY);
+        }
+      });
+
+      // ===========================================
+      // GAME LOOP & VISIBILITY
+      // ===========================================
       let tickInterval = setInterval(tick, CONFIG.TICK_INTERVAL_MS);
 
       document.addEventListener('visibilitychange', () => {
@@ -678,10 +2280,10 @@
           clearInterval(tickInterval);
           tickInterval = null;
         } else {
-          // Reset timing state when returning to prevent stale data
           S.log = [];
           S.last = 0;
           S.combo = 0;
+          S.shakeIntensity = 0;
           if (!tickInterval) tickInterval = setInterval(tick, CONFIG.TICK_INTERVAL_MS);
           render();
         }
