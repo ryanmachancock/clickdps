@@ -128,11 +128,6 @@
           linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
       }
 
-      /* Ambient mode modifiers */
-      [data-ambient="true"] {
-        --ambient-multiplier: 0.6;
-      }
-
       * { margin: 0; padding: 0; box-sizing: border-box; }
 
       html, body {
@@ -595,13 +590,8 @@
         left: var(--spacing);
       }
 
-      #ambient-btn {
+      #mode-btn {
         left: 120px;
-      }
-
-      #ambient-btn.on {
-        color: var(--color-success);
-        border-color: var(--color-success);
       }
 
       /* Confirmation modal */
@@ -672,23 +662,6 @@
       #modal-cancel:hover {
         color: var(--color-text);
         border-color: var(--color-muted);
-      }
-
-      /* Ambient mode styles */
-      [data-ambient="true"] #dps-num {
-        transition: transform 0.3s ease-out;
-      }
-
-      [data-ambient="true"] .hit {
-        animation-duration: 1s;
-      }
-
-      [data-ambient="true"] .hit.crit {
-        animation-duration: 1.2s;
-      }
-
-      [data-ambient="true"] .ring {
-        animation-duration: 0.6s;
       }
 
       /* ==========================================
@@ -831,6 +804,373 @@
         pointer-events: none;
         z-index: 4;
       }
+
+      /* ==========================================
+         LIVES DISPLAY
+         ========================================== */
+      #lives {
+        position: fixed;
+        top: var(--spacing);
+        right: var(--spacing);
+        z-index: 100;
+        display: flex;
+        gap: 8px;
+      }
+
+      .life {
+        width: 28px;
+        height: 28px;
+        transition: opacity 0.3s, transform 0.3s;
+      }
+
+      .life.lost {
+        opacity: 0.25;
+        transform: scale(0.8);
+      }
+
+      .life.healing {
+        animation: life-heal 0.5s ease-out;
+      }
+
+      @keyframes life-heal {
+        0% { transform: scale(1.5); opacity: 0.5; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+
+      /* ==========================================
+         TARGET MODE HUD
+         ========================================== */
+      #target-hud {
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        z-index: 100;
+      }
+
+      #target-round {
+        font-family: var(--font-main);
+        font-size: 14px;
+        letter-spacing: 0.2em;
+        color: var(--color-muted);
+        margin-bottom: 8px;
+      }
+
+      #target-count {
+        font-family: var(--font-main);
+        font-size: 32px;
+        font-weight: 900;
+        color: var(--color-success);
+      }
+
+      #target-timer {
+        font-size: 18px;
+        color: var(--color-accent);
+        margin-top: 4px;
+      }
+
+      /* ==========================================
+         RHYTHM MODE HUD
+         ========================================== */
+      #rhythm-hud {
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        z-index: 100;
+      }
+
+      #rhythm-score-label {
+        font-size: 10px;
+        letter-spacing: 0.3em;
+        color: var(--color-muted);
+      }
+
+      #rhythm-score {
+        font-family: var(--font-main);
+        font-size: 48px;
+        font-weight: 900;
+        color: var(--color-success);
+        line-height: 1;
+      }
+
+      #rhythm-streak {
+        font-size: 18px;
+        color: var(--color-accent);
+        margin-top: 8px;
+      }
+
+      #rhythm-bpm {
+        font-size: 12px;
+        color: var(--color-muted);
+        margin-top: 4px;
+      }
+
+      /* ==========================================
+         GAME TARGETS
+         ========================================== */
+      .game-target {
+        position: absolute;
+        width: 90px;
+        height: 90px;
+        border: 3px solid var(--color-accent);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 50;
+        box-shadow: 0 0 20px var(--color-glow);
+      }
+
+      .game-target::before {
+        content: '';
+        position: absolute;
+        inset: -8px;
+        border: 2px solid var(--color-accent);
+        border-radius: 50%;
+        opacity: 0.5;
+        animation: target-pulse 1s ease-in-out infinite;
+      }
+
+      .game-target::after {
+        content: '';
+        position: absolute;
+        inset: 35%;
+        background: var(--color-accent);
+        border-radius: 50%;
+        opacity: 0.8;
+      }
+
+      @keyframes target-pulse {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.1); opacity: 0.3; }
+      }
+
+      .target-shrink {
+        position: absolute;
+        inset: -15px;
+        border: 3px solid var(--color-success);
+        border-radius: 50%;
+        animation: target-shrink-anim var(--shrink-duration, 2s) linear forwards;
+      }
+
+      @keyframes target-shrink-anim {
+        0% { transform: scale(1.5); opacity: 1; }
+        100% { transform: scale(1); opacity: 0.3; }
+      }
+
+      /* ==========================================
+         RHYTHM NOTES
+         ========================================== */
+      .rhythm-note {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        border: 3px solid var(--color-accent);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 50;
+      }
+
+      .rhythm-note::after {
+        content: '';
+        position: absolute;
+        inset: 30%;
+        background: var(--color-accent);
+        border-radius: 50%;
+      }
+
+      .note-approach {
+        position: absolute;
+        inset: -20px;
+        border: 3px solid var(--color-success);
+        border-radius: 50%;
+        animation: note-approach-anim var(--approach-time, 1.2s) linear forwards;
+      }
+
+      @keyframes note-approach-anim {
+        0% { transform: scale(2); opacity: 1; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+
+      /* ==========================================
+         POWER-UPS
+         ========================================== */
+      .power-up {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 52;
+        animation: power-up-float 0.5s ease-in-out infinite alternate;
+      }
+
+      @keyframes power-up-float {
+        0% { transform: translate(-50%, -50%) translateY(0); }
+        100% { transform: translate(-50%, -50%) translateY(-5px); }
+      }
+
+      .power-up-heart {
+        width: 100%;
+        height: 100%;
+        background: var(--color-success);
+        clip-path: path('M25,45 C25,20 0,20 0,35 C0,50 25,65 25,65 C25,65 50,50 50,35 C50,20 25,20 25,45');
+        filter: drop-shadow(0 0 10px var(--color-success));
+      }
+
+      /* ==========================================
+         ROUND SPLASH
+         ========================================== */
+      #round-splash {
+        position: fixed;
+        inset: 0;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 9000;
+      }
+
+      #round-splash.show {
+        display: flex;
+        animation: splash-in 0.3s ease-out;
+      }
+
+      #round-splash .round-text {
+        font-family: var(--font-main);
+        font-size: 64px;
+        font-weight: 900;
+        color: var(--color-accent);
+        text-shadow: 0 0 40px var(--color-glow);
+        animation: round-text-pulse 0.5s ease-out;
+      }
+
+      @keyframes splash-in {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+
+      @keyframes round-text-pulse {
+        0% { transform: scale(0.5); opacity: 0; }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); opacity: 1; }
+      }
+
+      /* ==========================================
+         GAME OVER
+         ========================================== */
+      #game-over-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 10001;
+      }
+
+      #game-over-overlay.show {
+        display: flex;
+      }
+
+      #game-over-content {
+        text-align: center;
+        padding: 40px;
+      }
+
+      #game-over-title {
+        font-family: var(--font-main);
+        font-size: 48px;
+        font-weight: 900;
+        color: var(--color-accent);
+        margin-bottom: 24px;
+        text-shadow: 0 0 30px var(--color-glow);
+      }
+
+      #game-over-score {
+        font-size: 24px;
+        color: var(--color-text);
+        margin-bottom: 8px;
+      }
+
+      #game-over-best {
+        font-size: 16px;
+        color: var(--color-success);
+        margin-bottom: 32px;
+      }
+
+      /* ==========================================
+         HIT FEEDBACK FOR MODES
+         ========================================== */
+      .hit-perfect {
+        color: var(--color-success) !important;
+        text-shadow: 0 0 20px var(--color-success) !important;
+      }
+
+      .hit-good {
+        color: var(--color-accent) !important;
+      }
+
+      .hit-miss {
+        color: var(--color-muted) !important;
+      }
+
+      /* ==========================================
+         THEME-SPECIFIC: GAME ELEMENTS
+         ========================================== */
+
+      /* Cyber targets */
+      [data-theme="cyber"] .game-target {
+        border-style: dashed;
+        animation: cyber-target-scan 1s linear infinite;
+      }
+
+      @keyframes cyber-target-scan {
+        0% { border-color: var(--color-accent); }
+        50% { border-color: var(--color-success); }
+        100% { border-color: var(--color-accent); }
+      }
+
+      /* Arcade targets */
+      [data-theme="arcade"] .game-target {
+        border-radius: 0;
+        border-width: 4px;
+      }
+
+      [data-theme="arcade"] .game-target::after {
+        border-radius: 0;
+        inset: 30%;
+      }
+
+      /* Synth targets */
+      [data-theme="synth"] .game-target {
+        box-shadow: 0 0 30px var(--color-accent), inset 0 0 20px var(--color-glow);
+      }
+
+      /* Brutal targets */
+      [data-theme="brutal"] .game-target {
+        border-radius: 0;
+        border-width: 6px;
+        border-color: var(--color-accent);
+        box-shadow: none;
+      }
+
+      [data-theme="brutal"] .game-target::before {
+        display: none;
+      }
+
+      /* Bloom targets */
+      [data-theme="bloom"] .game-target {
+        border-color: var(--color-accent);
+        box-shadow: 0 0 25px var(--color-glow);
+      }
+
+      [data-theme="bloom"] .game-target::after {
+        background: linear-gradient(135deg, var(--color-accent), var(--color-success));
+      }
     </style>
   </head>
 
@@ -866,6 +1206,24 @@
         <span>TOTAL DMG</span> <span id="s-dmg">0</span>
       </div>
 
+      <!-- Lives display -->
+      <div id="lives" aria-label="Lives remaining"></div>
+
+      <!-- Target mode HUD -->
+      <div id="target-hud" style="display: none;">
+        <div id="target-round">ROUND <span id="target-round-num">1</span></div>
+        <div id="target-count"><span id="targets-hit">0</span> / <span id="targets-required">5</span></div>
+        <div id="target-timer"><span id="time-remaining">25.0</span>s</div>
+      </div>
+
+      <!-- Rhythm mode HUD -->
+      <div id="rhythm-hud" style="display: none;">
+        <div id="rhythm-score-label">SCORE</div>
+        <div id="rhythm-score">0</div>
+        <div id="rhythm-streak"><span id="streak-count">0</span>x STREAK</div>
+        <div id="rhythm-bpm"><span id="bpm-value">100</span> BPM</div>
+      </div>
+
       <div id="bar-container">
         <div id="bar-label">intensity</div>
         <div id="bar"><div id="bar-fill"></div></div>
@@ -875,7 +1233,7 @@
     </div>
 
     <button id="theme-btn" class="bottom-btn" aria-label="Change color theme">cyber</button>
-    <button id="ambient-btn" class="bottom-btn" aria-label="Toggle ambient mode">ambient</button>
+    <button id="mode-btn" class="bottom-btn" aria-label="Change game mode">standard</button>
     <button id="reset-btn" class="bottom-btn" aria-label="Reset all stats and high score">reset</button>
     <button id="sound-toggle" class="bottom-btn" aria-label="Toggle sound on or off" aria-pressed="false">sound: off</button>
 
@@ -886,6 +1244,19 @@
           <button id="modal-cancel" class="modal-btn">Cancel</button>
           <button id="modal-confirm" class="modal-btn">Reset</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Round transition splash -->
+    <div id="round-splash"></div>
+
+    <!-- Game over overlay -->
+    <div id="game-over-overlay">
+      <div id="game-over-content">
+        <div id="game-over-title">GAME OVER</div>
+        <div id="game-over-score"></div>
+        <div id="game-over-best"></div>
+        <button id="game-over-restart" class="modal-btn">PLAY AGAIN</button>
       </div>
     </div>
 
@@ -919,7 +1290,7 @@
         STORAGE_KEY_BEST: 'clickdps-best',
         STORAGE_KEY_SOUND: 'clickdps-sound',
         STORAGE_KEY_THEME: 'clickdps-theme',
-        STORAGE_KEY_AMBIENT: 'clickdps-ambient',
+        STORAGE_KEY_MODE: 'clickdps-mode',
 
         // Visual effects
         MAX_SHAKE: 8,
@@ -934,9 +1305,54 @@
         // Themes
         THEMES: ['cyber', 'arcade', 'synth', 'brutal', 'bloom'],
 
-        // Ambient mode
-        AMBIENT_COMBO_WINDOW_MS: 500,
-        AMBIENT_COMBO_DECAY_MS: 800,
+        // Game Modes
+        MODES: ['standard', 'target', 'rhythm'],
+
+        // Lives System
+        DEFAULT_LIVES: 3,
+        MAX_LIVES: 3,
+
+        // Target Mode
+        TARGET: {
+          ROUND_DURATION_BASE: 25000,
+          ROUND_DURATION_MIN: 15000,
+          ROUND_DURATION_DECREASE: 500,
+          TARGETS_REQUIRED_BASE: 5,
+          TARGETS_INCREASE_PER_LEVEL: 2,
+          MAX_TARGETS_REQUIRED: 20,
+          TARGET_DURATION_BASE: 2500,
+          TARGET_DURATION_MIN: 1000,
+          TARGET_DURATION_DECREASE: 50,
+          SPAWN_INTERVAL_BASE: 1200,
+          SPAWN_INTERVAL_MIN: 500,
+          SPAWN_INTERVAL_DECREASE: 30,
+          TARGET_RADIUS: 45,
+          MAX_CONCURRENT: 3,
+          SAFE_MARGIN: 80,
+          ROUND_TRANSITION_MS: 1500,
+        },
+
+        // Rhythm Mode
+        RHYTHM: {
+          BPM_BASE: 100,
+          BPM_INCREASE: 5,
+          BPM_MAX: 160,
+          NOTE_APPROACH_TIME: 1200,
+          PERFECT_WINDOW: 50,
+          GOOD_WINDOW: 120,
+          NOTE_RADIUS: 40,
+          SCORE_PERFECT: 300,
+          SCORE_GOOD: 100,
+          MISS_THRESHOLD: 3,
+          STREAK_MULTIPLIER: 0.01,
+        },
+
+        // Power-ups
+        POWER_UP: {
+          SPAWN_CHANCE: 0.005,
+          DURATION: 2000,
+          RADIUS: 30,
+        },
       };
 
       // ===========================================
@@ -984,6 +1400,39 @@
         mouseX: 0,
         mouseY: 0,
         trailPoints: [],
+
+        // Game mode
+        mode: 'standard',
+        lives: CONFIG.DEFAULT_LIVES,
+        maxLives: CONFIG.MAX_LIVES,
+        gameOver: false,
+
+        // Target mode state
+        target: {
+          round: 1,
+          timeRemaining: 0,
+          targetsHit: 0,
+          targetsRequired: CONFIG.TARGET.TARGETS_REQUIRED_BASE,
+          active: [],
+          powerUp: null,
+          spawnTimer: null,
+          roundTimer: null,
+          inTransition: false,
+        },
+
+        // Rhythm mode state
+        rhythm: {
+          bpm: CONFIG.RHYTHM.BPM_BASE,
+          score: 0,
+          streak: 0,
+          bestStreak: 0,
+          missCount: 0,
+          notes: [],
+          powerUp: null,
+          beatTimer: null,
+          lastBeat: 0,
+          level: 1,
+        },
       };
 
       // ===========================================
@@ -1003,9 +1452,26 @@
       const edgeGlow = $('edge-glow');
       const milestoneEl = $('milestone');
       const themeBtn = $('theme-btn');
-      const ambientBtn = $('ambient-btn');
+      const modeBtn = $('mode-btn');
       const fxCanvas = $('fx-canvas');
       const fxCtx = fxCanvas.getContext('2d');
+
+      // Mode-specific DOM refs
+      const livesContainer = $('lives');
+      const targetHud = $('target-hud');
+      const targetRoundNum = $('target-round-num');
+      const targetsHitEl = $('targets-hit');
+      const targetsRequiredEl = $('targets-required');
+      const timeRemainingEl = $('time-remaining');
+      const rhythmHud = $('rhythm-hud');
+      const rhythmScoreEl = $('rhythm-score');
+      const streakCountEl = $('streak-count');
+      const bpmValueEl = $('bpm-value');
+      const roundSplash = $('round-splash');
+      const gameOverOverlay = $('game-over-overlay');
+      const gameOverScore = $('game-over-score');
+      const gameOverBest = $('game-over-best');
+      const gameOverRestart = $('game-over-restart');
 
       // ===========================================
       // FX CANVAS SETUP
@@ -1414,31 +1880,684 @@
       themeBtn.addEventListener('click', cycleTheme);
 
       // ===========================================
-      // AMBIENT MODE
+      // GAME MODE SYSTEM
       // ===========================================
-      let ambientMode = safeGetItem(CONFIG.STORAGE_KEY_AMBIENT) === 'true';
-      if (ambientMode) {
-        document.body.setAttribute('data-ambient', 'true');
-        ambientBtn.classList.add('on');
-      }
+      let currentModeIndex = CONFIG.MODES.indexOf(safeGetItem(CONFIG.STORAGE_KEY_MODE, 'standard'));
+      if (currentModeIndex === -1) currentModeIndex = 0;
+      S.mode = CONFIG.MODES[currentModeIndex];
+      modeBtn.textContent = CONFIG.MODES[currentModeIndex];
 
-      function toggleAmbient(e) {
+      let targetIdCounter = 0;
+      let noteIdCounter = 0;
+
+      function cycleMode(e) {
         e.stopPropagation();
-        ambientMode = !ambientMode;
-        document.body.setAttribute('data-ambient', ambientMode);
-        safeSetItem(CONFIG.STORAGE_KEY_AMBIENT, ambientMode);
-        ambientBtn.classList.toggle('on', ambientMode);
+        if (S.gameOver) return;
+        cleanupMode();
+        currentModeIndex = (currentModeIndex + 1) % CONFIG.MODES.length;
+        const mode = CONFIG.MODES[currentModeIndex];
+        S.mode = mode;
+        safeSetItem(CONFIG.STORAGE_KEY_MODE, mode);
+        modeBtn.textContent = mode;
+        initMode(mode);
       }
 
-      ambientBtn.addEventListener('click', toggleAmbient);
+      modeBtn.addEventListener('click', cycleMode);
 
-      function getComboWindow() {
-        return ambientMode ? CONFIG.AMBIENT_COMBO_WINDOW_MS : CONFIG.COMBO_WINDOW_MS;
+      function cleanupMode() {
+        // Clear target mode
+        if (S.target.spawnTimer) clearTimeout(S.target.spawnTimer);
+        if (S.target.roundTimer) clearInterval(S.target.roundTimer);
+        S.target.active.forEach(t => { if (t.el) release(t.el); });
+        S.target.active = [];
+        if (S.target.powerUp) { release(S.target.powerUp.el); S.target.powerUp = null; }
+
+        // Clear rhythm mode
+        if (S.rhythm.beatTimer) clearInterval(S.rhythm.beatTimer);
+        S.rhythm.notes.forEach(n => { if (n.el) release(n.el); });
+        S.rhythm.notes = [];
+        if (S.rhythm.powerUp) { release(S.rhythm.powerUp.el); S.rhythm.powerUp = null; }
+
+        // Hide HUDs
+        targetHud.style.display = 'none';
+        rhythmHud.style.display = 'none';
+        roundSplash.classList.remove('show');
       }
 
-      function getComboDecay() {
-        return ambientMode ? CONFIG.AMBIENT_COMBO_DECAY_MS : CONFIG.COMBO_DECAY_MS;
+      function initMode(mode) {
+        // Reset common state
+        S.combo = 0;
+        S.log = [];
+        S.last = 0;
+        S.lives = CONFIG.DEFAULT_LIVES;
+        S.gameOver = false;
+        gameOverOverlay.classList.remove('show');
+
+        // Update UI visibility
+        const standardHud = document.getElementById('hud');
+        const bestDisplay = document.getElementById('best');
+        const statsDisplay = document.getElementById('stats');
+        const barContainer = document.getElementById('bar-container');
+
+        if (mode === 'standard') {
+          standardHud.style.display = 'block';
+          bestDisplay.style.display = 'block';
+          statsDisplay.style.display = 'block';
+          barContainer.style.display = 'block';
+          livesContainer.style.display = 'none';
+          targetHud.style.display = 'none';
+          rhythmHud.style.display = 'none';
+        } else if (mode === 'target') {
+          standardHud.style.display = 'none';
+          bestDisplay.style.display = 'none';
+          statsDisplay.style.display = 'none';
+          barContainer.style.display = 'none';
+          livesContainer.style.display = 'flex';
+          targetHud.style.display = 'block';
+          rhythmHud.style.display = 'none';
+          initTargetMode();
+        } else if (mode === 'rhythm') {
+          standardHud.style.display = 'none';
+          bestDisplay.style.display = 'none';
+          statsDisplay.style.display = 'none';
+          barContainer.style.display = 'none';
+          livesContainer.style.display = 'flex';
+          targetHud.style.display = 'none';
+          rhythmHud.style.display = 'block';
+          initRhythmMode();
+        }
+
+        renderLives();
+        render();
       }
+
+      // ===========================================
+      // LIVES SYSTEM
+      // ===========================================
+      function renderLives() {
+        livesContainer.innerHTML = '';
+        for (let i = 0; i < S.maxLives; i++) {
+          const life = document.createElement('div');
+          life.className = 'life' + (i >= S.lives ? ' lost' : '');
+          life.innerHTML = `<svg viewBox="0 0 24 24" fill="${i < S.lives ? 'var(--color-accent)' : 'var(--color-muted)'}">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>`;
+          livesContainer.appendChild(life);
+        }
+      }
+
+      function loseLife() {
+        S.lives--;
+        renderLives();
+        playLifeLostSound();
+
+        if (S.lives <= 0) {
+          triggerGameOver();
+        } else if (S.mode === 'target') {
+          // Restart same round
+          showRoundSplash('TRY AGAIN', () => startTargetRound());
+        }
+      }
+
+      function gainLife() {
+        if (S.lives < S.maxLives) {
+          S.lives++;
+          renderLives();
+          playPowerUpSound();
+          // Animate the healed heart
+          const hearts = livesContainer.querySelectorAll('.life');
+          if (hearts[S.lives - 1]) {
+            hearts[S.lives - 1].classList.add('healing');
+            setTimeout(() => hearts[S.lives - 1].classList.remove('healing'), 500);
+          }
+        }
+      }
+
+      function playLifeLostSound() {
+        if (!soundEnabled) return;
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(200, now);
+        o.frequency.exponentialRampToValueAtTime(50, now + 0.3);
+        g.gain.setValueAtTime(0.3, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(now); o.stop(now + 0.3);
+      }
+
+      function playPowerUpSound() {
+        if (!soundEnabled) return;
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+        [400, 600, 800].forEach((freq, i) => {
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.type = 'sine';
+          o.frequency.setValueAtTime(freq, now + i * 0.1);
+          g.gain.setValueAtTime(0.2, now + i * 0.1);
+          g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.15);
+          o.connect(g); g.connect(ctx.destination);
+          o.start(now + i * 0.1); o.stop(now + i * 0.1 + 0.15);
+        });
+      }
+
+      // ===========================================
+      // TARGET MODE
+      // ===========================================
+      function initTargetMode() {
+        S.target.round = 1;
+        S.target.targetsHit = 0;
+        S.target.targetsRequired = CONFIG.TARGET.TARGETS_REQUIRED_BASE;
+        S.target.active = [];
+        S.target.inTransition = false;
+        calculateTargetRoundParams();
+        showRoundSplash('ROUND 1', () => startTargetRound());
+      }
+
+      function calculateTargetRoundParams() {
+        const level = S.target.round;
+        S.target.targetsRequired = Math.min(
+          CONFIG.TARGET.MAX_TARGETS_REQUIRED,
+          CONFIG.TARGET.TARGETS_REQUIRED_BASE + (level - 1) * CONFIG.TARGET.TARGETS_INCREASE_PER_LEVEL
+        );
+        S.target.roundDuration = Math.max(
+          CONFIG.TARGET.ROUND_DURATION_MIN,
+          CONFIG.TARGET.ROUND_DURATION_BASE - (level - 1) * CONFIG.TARGET.ROUND_DURATION_DECREASE
+        );
+      }
+
+      function showRoundSplash(text, callback) {
+        S.target.inTransition = true;
+        roundSplash.innerHTML = `<div class="round-text">${text}</div>`;
+        roundSplash.classList.add('show');
+        setTimeout(() => {
+          roundSplash.classList.remove('show');
+          S.target.inTransition = false;
+          if (callback) callback();
+        }, CONFIG.TARGET.ROUND_TRANSITION_MS);
+      }
+
+      function startTargetRound() {
+        S.target.targetsHit = 0;
+        S.target.timeRemaining = S.target.roundDuration;
+        updateTargetHUD();
+        scheduleNextTarget();
+        startRoundTimer();
+      }
+
+      function scheduleNextTarget() {
+        const level = S.target.round;
+        const interval = Math.max(
+          CONFIG.TARGET.SPAWN_INTERVAL_MIN,
+          CONFIG.TARGET.SPAWN_INTERVAL_BASE - (level - 1) * CONFIG.TARGET.SPAWN_INTERVAL_DECREASE
+        );
+        const variance = interval * 0.3;
+        const delay = interval + (Math.random() - 0.5) * variance;
+
+        S.target.spawnTimer = setTimeout(() => {
+          if (S.mode !== 'target' || S.gameOver || S.target.inTransition) return;
+          if (S.target.timeRemaining > 0) {
+            spawnTarget();
+            scheduleNextTarget();
+          }
+        }, delay);
+      }
+
+      function spawnTarget() {
+        const maxConcurrent = Math.min(CONFIG.TARGET.MAX_CONCURRENT + Math.floor(S.target.round / 3), 6);
+        const activeCount = S.target.active.filter(t => !t.hit && !t.expired).length;
+        if (activeCount >= maxConcurrent) return;
+
+        const margin = CONFIG.TARGET.SAFE_MARGIN;
+        const x = margin + Math.random() * (window.innerWidth - margin * 2);
+        const y = margin + Math.random() * (window.innerHeight - margin * 2);
+
+        const level = S.target.round;
+        const baseDuration = CONFIG.TARGET.TARGET_DURATION_BASE - (level - 1) * CONFIG.TARGET.TARGET_DURATION_DECREASE;
+        const duration = Math.max(CONFIG.TARGET.TARGET_DURATION_MIN, baseDuration + (Math.random() - 0.5) * 300);
+
+        const el = getPooled(targetPool);
+        if (!el) return;
+
+        const target = {
+          id: ++targetIdCounter,
+          x, y,
+          el,
+          spawnTime: performance.now(),
+          duration,
+          hit: false,
+          expired: false,
+        };
+
+        el.className = 'game-target';
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        el.style.display = 'block';
+        el.innerHTML = `<div class="target-shrink" style="--shrink-duration: ${duration}ms"></div>`;
+
+        S.target.active.push(target);
+
+        // Schedule expiration
+        setTimeout(() => expireTarget(target.id), duration);
+
+        // Maybe spawn power-up
+        if (S.lives < S.maxLives && Math.random() < CONFIG.POWER_UP.SPAWN_CHANCE) {
+          spawnPowerUp('target');
+        }
+      }
+
+      function expireTarget(targetId) {
+        const target = S.target.active.find(t => t.id === targetId);
+        if (!target || target.hit || target.expired) return;
+
+        target.expired = true;
+        if (target.el) {
+          target.el.style.display = 'none';
+          release(target.el);
+        }
+      }
+
+      function hitTarget(x, y) {
+        const hitRadius = CONFIG.TARGET.TARGET_RADIUS;
+        for (const target of S.target.active) {
+          if (target.hit || target.expired) continue;
+          const dx = x - target.x;
+          const dy = y - target.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist <= hitRadius) {
+            target.hit = true;
+            S.target.targetsHit++;
+
+            // Visual feedback
+            if (target.el) {
+              target.el.style.display = 'none';
+              release(target.el);
+            }
+            triggerTargetHitEffect(target.x, target.y);
+            playHit(true, S.target.targetsHit);
+
+            updateTargetHUD();
+
+            // Check round completion
+            if (S.target.targetsHit >= S.target.targetsRequired) {
+              completeTargetRound();
+            }
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function startRoundTimer() {
+        S.target.roundTimer = setInterval(() => {
+          if (S.mode !== 'target' || S.gameOver) {
+            clearInterval(S.target.roundTimer);
+            return;
+          }
+          S.target.timeRemaining -= 100;
+          updateTargetHUD();
+
+          if (S.target.timeRemaining <= 0) {
+            clearInterval(S.target.roundTimer);
+            endTargetRound();
+          }
+        }, 100);
+      }
+
+      function updateTargetHUD() {
+        targetRoundNum.textContent = S.target.round;
+        targetsHitEl.textContent = S.target.targetsHit;
+        targetsRequiredEl.textContent = S.target.targetsRequired;
+        timeRemainingEl.textContent = (S.target.timeRemaining / 1000).toFixed(1);
+      }
+
+      function completeTargetRound() {
+        if (S.target.spawnTimer) clearTimeout(S.target.spawnTimer);
+        if (S.target.roundTimer) clearInterval(S.target.roundTimer);
+
+        // Clear remaining targets
+        S.target.active.forEach(t => {
+          if (t.el && !t.hit) {
+            t.el.style.display = 'none';
+            release(t.el);
+          }
+        });
+        S.target.active = [];
+
+        // Advance to next round
+        S.target.round++;
+        calculateTargetRoundParams();
+        showRoundSplash(`ROUND ${S.target.round}`, () => startTargetRound());
+      }
+
+      function endTargetRound() {
+        if (S.target.spawnTimer) clearTimeout(S.target.spawnTimer);
+
+        // Clear remaining targets
+        S.target.active.forEach(t => {
+          if (t.el) {
+            t.el.style.display = 'none';
+            release(t.el);
+          }
+        });
+        S.target.active = [];
+
+        // Check if passed
+        if (S.target.targetsHit >= S.target.targetsRequired) {
+          completeTargetRound();
+        } else {
+          loseLife();
+        }
+      }
+
+      function triggerTargetHitEffect(x, y) {
+        // Add burst effect
+        spawnParticles(x, y, 8, 'var(--color-success)');
+      }
+
+      // ===========================================
+      // RHYTHM MODE
+      // ===========================================
+      function initRhythmMode() {
+        S.rhythm.bpm = CONFIG.RHYTHM.BPM_BASE;
+        S.rhythm.score = 0;
+        S.rhythm.streak = 0;
+        S.rhythm.bestStreak = 0;
+        S.rhythm.missCount = 0;
+        S.rhythm.notes = [];
+        S.rhythm.level = 1;
+        S.rhythm.lastBeat = 0;
+        updateRhythmHUD();
+        showRoundSplash('GET READY', () => startRhythmBeatLoop());
+      }
+
+      function startRhythmBeatLoop() {
+        const beatInterval = 60000 / S.rhythm.bpm;
+        S.rhythm.beatTimer = setInterval(() => {
+          if (S.mode !== 'rhythm' || S.gameOver) {
+            clearInterval(S.rhythm.beatTimer);
+            return;
+          }
+          onBeat();
+        }, beatInterval);
+      }
+
+      function onBeat() {
+        S.rhythm.lastBeat = performance.now();
+        playBeatSound();
+        spawnNote();
+
+        // Check for missed notes
+        checkMissedNotes();
+
+        // Maybe spawn power-up
+        if (S.lives < S.maxLives && Math.random() < CONFIG.POWER_UP.SPAWN_CHANCE) {
+          spawnPowerUp('rhythm');
+        }
+      }
+
+      function playBeatSound() {
+        if (!soundEnabled) return;
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(80, now);
+        g.gain.setValueAtTime(0.15, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(now); o.stop(now + 0.1);
+      }
+
+      function spawnNote() {
+        const margin = 100;
+        const x = margin + Math.random() * (window.innerWidth - margin * 2);
+        const y = margin + Math.random() * (window.innerHeight - margin * 2);
+
+        const el = getPooled(targetPool);
+        if (!el) return;
+
+        const note = {
+          id: ++noteIdCounter,
+          x, y,
+          el,
+          spawnTime: performance.now(),
+          hitTime: performance.now() + CONFIG.RHYTHM.NOTE_APPROACH_TIME,
+          hit: false,
+          expired: false,
+        };
+
+        el.className = 'rhythm-note';
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        el.style.display = 'block';
+        el.innerHTML = `<div class="note-approach" style="--approach-time: ${CONFIG.RHYTHM.NOTE_APPROACH_TIME}ms"></div>`;
+
+        S.rhythm.notes.push(note);
+      }
+
+      function checkMissedNotes() {
+        const now = performance.now();
+        for (const note of S.rhythm.notes) {
+          if (note.hit || note.expired) continue;
+          // Note is missed if we're past the good window
+          if (now > note.hitTime + CONFIG.RHYTHM.GOOD_WINDOW) {
+            note.expired = true;
+            S.rhythm.streak = 0;
+            S.rhythm.missCount++;
+
+            if (note.el) {
+              note.el.style.display = 'none';
+              release(note.el);
+            }
+
+            // Show miss feedback
+            showHitFeedback(note.x, note.y, 'MISS', 'hit-miss');
+
+            if (S.rhythm.missCount >= CONFIG.RHYTHM.MISS_THRESHOLD) {
+              S.rhythm.missCount = 0;
+              loseLife();
+            }
+
+            updateRhythmHUD();
+          }
+        }
+      }
+
+      function hitNote(x, y) {
+        const now = performance.now();
+        let closestNote = null;
+        let closestDist = Infinity;
+
+        for (const note of S.rhythm.notes) {
+          if (note.hit || note.expired) continue;
+          const dx = x - note.x;
+          const dy = y - note.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist <= CONFIG.RHYTHM.NOTE_RADIUS && dist < closestDist) {
+            closestNote = note;
+            closestDist = dist;
+          }
+        }
+
+        if (closestNote) {
+          const timing = Math.abs(now - closestNote.hitTime);
+          closestNote.hit = true;
+
+          let score, rating, ratingClass;
+
+          if (timing <= CONFIG.RHYTHM.PERFECT_WINDOW) {
+            score = CONFIG.RHYTHM.SCORE_PERFECT;
+            rating = 'PERFECT';
+            ratingClass = 'hit-perfect';
+          } else if (timing <= CONFIG.RHYTHM.GOOD_WINDOW) {
+            score = CONFIG.RHYTHM.SCORE_GOOD;
+            rating = 'GOOD';
+            ratingClass = 'hit-good';
+          } else {
+            score = 0;
+            rating = 'MISS';
+            ratingClass = 'hit-miss';
+            S.rhythm.streak = 0;
+          }
+
+          if (rating !== 'MISS') {
+            S.rhythm.streak++;
+            S.rhythm.bestStreak = Math.max(S.rhythm.bestStreak, S.rhythm.streak);
+            score = Math.round(score * (1 + S.rhythm.streak * CONFIG.RHYTHM.STREAK_MULTIPLIER));
+            S.rhythm.missCount = 0;
+
+            // Level up every 20 successful hits
+            if (S.rhythm.streak > 0 && S.rhythm.streak % 20 === 0) {
+              levelUpRhythm();
+            }
+          }
+
+          S.rhythm.score += score;
+
+          if (closestNote.el) {
+            closestNote.el.style.display = 'none';
+            release(closestNote.el);
+          }
+
+          showHitFeedback(closestNote.x, closestNote.y, rating, ratingClass);
+          if (rating !== 'MISS') {
+            playHit(rating === 'PERFECT', S.rhythm.streak);
+            triggerTargetHitEffect(closestNote.x, closestNote.y);
+          }
+
+          updateRhythmHUD();
+          return true;
+        }
+        return false;
+      }
+
+      function levelUpRhythm() {
+        S.rhythm.level++;
+        S.rhythm.bpm = Math.min(CONFIG.RHYTHM.BPM_MAX, S.rhythm.bpm + CONFIG.RHYTHM.BPM_INCREASE);
+
+        // Restart beat loop with new BPM
+        if (S.rhythm.beatTimer) clearInterval(S.rhythm.beatTimer);
+        startRhythmBeatLoop();
+
+        // Visual feedback
+        triggerMilestone(`LEVEL ${S.rhythm.level}`);
+        updateRhythmHUD();
+      }
+
+      function showHitFeedback(x, y, text, className) {
+        const el = getPooled(hitPool);
+        if (!el) return;
+
+        el.className = `hit ${className}`;
+        el.textContent = text;
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        el.style.display = 'block';
+        el.style.animation = 'none';
+
+        requestAnimationFrame(() => {
+          void el.offsetHeight;
+          el.style.animation = '';
+        });
+
+        setTimeout(() => release(el), 600);
+      }
+
+      function updateRhythmHUD() {
+        rhythmScoreEl.textContent = S.rhythm.score;
+        streakCountEl.textContent = S.rhythm.streak;
+        bpmValueEl.textContent = S.rhythm.bpm;
+      }
+
+      // ===========================================
+      // POWER-UP SYSTEM
+      // ===========================================
+      function spawnPowerUp(mode) {
+        const stateObj = mode === 'target' ? S.target : S.rhythm;
+        if (stateObj.powerUp) return; // Only one at a time
+
+        const margin = CONFIG.TARGET.SAFE_MARGIN;
+        const x = margin + Math.random() * (window.innerWidth - margin * 2);
+        const y = margin + Math.random() * (window.innerHeight - margin * 2);
+
+        const el = getPooled(powerUpPool);
+        if (!el) return;
+
+        el.className = 'power-up';
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        el.style.display = 'block';
+        el.innerHTML = '<div class="power-up-heart"></div>';
+
+        stateObj.powerUp = { x, y, el, spawnTime: performance.now() };
+
+        // Auto-expire
+        setTimeout(() => {
+          if (stateObj.powerUp && stateObj.powerUp.el === el) {
+            el.style.display = 'none';
+            release(el);
+            stateObj.powerUp = null;
+          }
+        }, CONFIG.POWER_UP.DURATION);
+      }
+
+      function hitPowerUp(x, y) {
+        const stateObj = S.mode === 'target' ? S.target : S.rhythm;
+        if (!stateObj.powerUp) return false;
+
+        const dx = x - stateObj.powerUp.x;
+        const dy = y - stateObj.powerUp.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist <= CONFIG.POWER_UP.RADIUS) {
+          gainLife();
+          spawnParticles(stateObj.powerUp.x, stateObj.powerUp.y, 10, 'var(--color-success)');
+          stateObj.powerUp.el.style.display = 'none';
+          release(stateObj.powerUp.el);
+          stateObj.powerUp = null;
+          return true;
+        }
+        return false;
+      }
+
+      // ===========================================
+      // GAME OVER
+      // ===========================================
+      function triggerGameOver() {
+        S.gameOver = true;
+        cleanupMode();
+
+        let scoreText = '';
+        let bestKey = '';
+
+        if (S.mode === 'target') {
+          scoreText = `Reached Round ${S.target.round}`;
+          bestKey = 'clickdps-best-target';
+        } else if (S.mode === 'rhythm') {
+          scoreText = `Score: ${S.rhythm.score}`;
+          bestKey = 'clickdps-best-rhythm';
+        }
+
+        const currentBest = parseInt(safeGetItem(bestKey, '0'));
+        const newScore = S.mode === 'target' ? S.target.round : S.rhythm.score;
+        const isNewBest = newScore > currentBest;
+
+        if (isNewBest) {
+          safeSetItem(bestKey, newScore);
+        }
+
+        gameOverScore.textContent = scoreText;
+        gameOverBest.textContent = isNewBest ? 'NEW BEST!' : `Best: ${Math.max(currentBest, newScore)}`;
+        gameOverOverlay.classList.add('show');
+      }
+
+      gameOverRestart.addEventListener('click', (e) => {
+        e.stopPropagation();
+        gameOverOverlay.classList.remove('show');
+        initMode(S.mode);
+      });
 
       // ===========================================
       // OBJECT POOLS (Optimized with free list for O(1) lookup)
@@ -1494,8 +2613,29 @@
         return trail;
       });
 
+      // Target pool for target mode
+      const TARGET_POOL_SIZE = 10;
+      const targetPool = createPool(TARGET_POOL_SIZE, 'target', () => {
+        const target = document.createElement('div');
+        target.className = 'game-target';
+        target.style.display = 'none';
+        shakeContainer.appendChild(target);
+        return target;
+      });
+
+      // Power-up pool
+      const POWERUP_POOL_SIZE = 3;
+      const powerUpPool = createPool(POWERUP_POOL_SIZE, 'powerup', () => {
+        const powerUp = document.createElement('div');
+        powerUp.className = 'power-up';
+        powerUp.innerHTML = '<div class="power-up-heart"></div>';
+        powerUp.style.display = 'none';
+        shakeContainer.appendChild(powerUp);
+        return powerUp;
+      });
+
       // Pool lookup by type
-      const poolsByType = { hit: hitPool, ring: ringPool, particle: particlePool, trail: trailPool };
+      const poolsByType = { hit: hitPool, ring: ringPool, particle: particlePool, trail: trailPool, target: targetPool, powerup: powerUpPool };
 
       // O(1) pool operations
       function getPooled(pool) {
@@ -1864,7 +3004,7 @@
       function playHit(crit, combo) {
         if (!soundEnabled) return;
         const ctx = getAudioCtx();
-        const volume = ambientMode ? 0.6 : 1;
+        const volume = 1;
         const sounds = getThemeSounds();
 
         if (audioBuffersReady && sounds.tap) {
@@ -1891,7 +3031,7 @@
       function playMilestoneSound() {
         if (!soundEnabled) return;
         const ctx = getAudioCtx();
-        const volume = ambientMode ? 0.5 : 1;
+        const volume = 1;
         const sounds = getThemeSounds();
 
         if (audioBuffersReady && sounds.milestone) {
@@ -2012,7 +3152,7 @@
         animations.trails.push({
           el: trail,
           startTime: now,
-          duration: ambientMode ? 400 : 200
+          duration: 200
         });
         startAnimationLoop();
       }
@@ -2084,8 +3224,36 @@
 
         if (S.hits === 0) hint.classList.add('hidden');
 
+        // Mode-specific handling
+        if (S.mode === 'target') {
+          if (S.gameOver || S.target.inTransition) return;
+          // Check power-up first
+          if (hitPowerUp(x, y)) return;
+          // Check targets
+          if (hitTarget(x, y)) return;
+          // Miss - show small feedback but no penalty
+          spawnParticles(x, y, 3, 'var(--color-secondary)');
+          if (navigator.vibrate) navigator.vibrate(5);
+          return;
+        }
+
+        if (S.mode === 'rhythm') {
+          if (S.gameOver) return;
+          // Check power-up first
+          if (hitPowerUp(x, y)) return;
+          // Check notes
+          if (hitNote(x, y)) return;
+          // Miss - break streak
+          S.rhythm.streak = 0;
+          spawnParticles(x, y, 3, 'var(--color-secondary)');
+          if (navigator.vibrate) navigator.vibrate(5);
+          render();
+          return;
+        }
+
+        // Standard mode behavior
         // Combo
-        S.combo = (now - S.last < getComboWindow()) ? Math.min(S.combo + 1, CONFIG.MAX_COMBO) : 0;
+        S.combo = (now - S.last < CONFIG.COMBO_WINDOW_MS) ? Math.min(S.combo + 1, CONFIG.MAX_COMBO) : 0;
         S.last = now;
 
         // Crit
@@ -2109,7 +3277,7 @@
         }
 
         // Screen shake (scales with combo)
-        const shakeAmount = ambientMode ? 1 : Math.min(2 + S.combo * 0.15, CONFIG.MAX_SHAKE);
+        const shakeAmount = Math.min(2 + S.combo * 0.15, CONFIG.MAX_SHAKE);
         S.shakeIntensity = Math.max(S.shakeIntensity, crit ? shakeAmount * 1.5 : shakeAmount);
 
         // Spawn particles on crits
@@ -2149,8 +3317,8 @@
           }
         });
 
-        const hitDuration = ambientMode ? (crit ? 1200 : 1000) : (crit ? 700 : 500);
-        const ringDuration = ambientMode ? 600 : 300;
+        const hitDuration = crit ? 700 : 500;
+        const ringDuration = 300;
         setTimeout(() => release(el), hitDuration);
         setTimeout(() => release(ring), ringDuration);
 
@@ -2228,7 +3396,7 @@
       // GAME LOOP
       // ===========================================
       function tick() {
-        if (performance.now() - S.last > getComboDecay() && S.combo > 0) {
+        if (performance.now() - S.last > CONFIG.COMBO_DECAY_MS && S.combo > 0) {
           S.combo = Math.max(0, S.combo - 1);
         }
         applyScreenShake();
@@ -2238,16 +3406,16 @@
       // ===========================================
       // EVENT LISTENERS
       // ===========================================
-      const buttons = [soundToggle, resetBtn, themeBtn, ambientBtn];
+      const buttons = [soundToggle, resetBtn, themeBtn, modeBtn, gameOverRestart];
 
       document.addEventListener('click', e => {
-        if (buttons.includes(e.target) || modalOverlay.classList.contains('show')) return;
+        if (buttons.includes(e.target) || modalOverlay.classList.contains('show') || gameOverOverlay.classList.contains('show')) return;
         smash(e.clientX, e.clientY);
       });
 
       document.addEventListener('touchstart', e => {
-        if (buttons.includes(e.target) || modalOverlay.contains(e.target)) return;
-        if (modalOverlay.classList.contains('show')) return;
+        if (buttons.includes(e.target) || modalOverlay.contains(e.target) || gameOverOverlay.contains(e.target)) return;
+        if (modalOverlay.classList.contains('show') || gameOverOverlay.classList.contains('show')) return;
         e.preventDefault();
         for (const t of e.touches) smash(t.clientX, t.clientY);
       }, { passive: false });
