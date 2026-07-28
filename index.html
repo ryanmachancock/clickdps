@@ -8,9 +8,12 @@
     <meta property="og:description" content="An addictive clicker game. Build combos, land critical hits, and chase your highest DPS score." />
     <meta property="og:type" content="website" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23000' width='100' height='100'/%3E%3Ctext x='50' y='50' text-anchor='middle' dominant-baseline='central' font-family='monospace' font-weight='900' font-size='60' fill='%23fff'%3EDPS%3C/text%3E%3Crect x='5' y='5' width='20' height='20' fill='none' stroke='%23ff0040' stroke-width='4'/%3E%3Crect x='75' y='75' width='20' height='20' fill='none' stroke='%2300ff88' stroke-width='4'/%3E%3C/svg%3E">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="theme-color" content="#0a0a12">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=VT323&family=Playfair+Display:wght@700;900&family=Space+Mono:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=VT323&family=Space+Mono:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <title>CLICKDPS</title>
     <style>
       /* ==========================================
@@ -2687,8 +2690,11 @@
           pool.inUse.add(idx);
           return pool.elements[idx];
         }
-        // Fallback: reuse oldest element
-        return pool.elements[0];
+        // Pool exhausted: steal round-robin rather than always index 0,
+        // so a rapid-click burst doesn't repeatedly yank the same element
+        // mid-animation.
+        pool.stealIndex = ((pool.stealIndex ?? -1) + 1) % pool.elements.length;
+        return pool.elements[pool.stealIndex];
       }
 
       function release(el) {
@@ -3275,7 +3281,7 @@
           // Check targets
           if (hitTarget(x, y)) return;
           // Miss - show small feedback but no penalty
-          spawnParticles(x, y, 3, 'var(--color-secondary)');
+          spawnParticles(x, y, 3, 'var(--color-muted)');
           if (navigator.vibrate) navigator.vibrate(5);
           return;
         }
@@ -3288,7 +3294,7 @@
           if (hitNote(x, y)) return;
           // Miss - break streak
           S.rhythm.streak = 0;
-          spawnParticles(x, y, 3, 'var(--color-secondary)');
+          spawnParticles(x, y, 3, 'var(--color-muted)');
           if (navigator.vibrate) navigator.vibrate(5);
           render();
           return;
@@ -3373,20 +3379,33 @@
       // ===========================================
       // RENDER
       // ===========================================
+      // Last-written values, so the tick-driven render() below only touches
+      // the DOM (and the mix-blend-mode #hud element) when something
+      // actually changed, instead of re-writing everything 20x/sec at idle.
+      const lastRender = { total: -1, combo: -1, int: -1, glow: -1, hits: -1, dmg: -1 };
+
       function render() {
         const now = performance.now();
         S.log = S.log.filter(e => e.t > now - CONFIG.DPS_WINDOW_MS);
 
         const total = S.log.reduce((a, e) => a + e.d, 0);
-        const prevTotal = parseInt(dps.dataset.value || '0');
-        dps.textContent = total;
-        dps.dataset.value = total;
 
-        // DPS pulse effect
-        if (total > prevTotal + 50) {
-          dps.classList.remove('pulse', 'big-pulse');
-          void dps.offsetWidth;
-          dps.classList.add(total > prevTotal + 200 ? 'big-pulse' : 'pulse');
+        if (total !== lastRender.total) {
+          const prevTotal = Math.max(lastRender.total, 0);
+          dps.textContent = total;
+          dps.dataset.value = total;
+
+          // DPS pulse effect (deferred a frame to avoid forcing a
+          // synchronous layout flush inside render())
+          if (total > prevTotal + 50) {
+            const pulseClass = total > prevTotal + 200 ? 'big-pulse' : 'pulse';
+            dps.classList.remove('pulse', 'big-pulse');
+            requestAnimationFrame(() => {
+              void dps.offsetWidth;
+              dps.classList.add(pulseClass);
+            });
+          }
+          lastRender.total = total;
         }
 
         // Check for new best
@@ -3404,35 +3423,45 @@
         checkMilestones(S.dmg, total);
 
         // Combo display with scale effect
-        if (S.combo > 3) {
-          comboEl.textContent = S.combo + 'x';
-          comboEl.classList.add('visible');
-          const comboScale = 1 + Math.min(S.combo / 50, 0.5);
-          comboEl.style.transform = `scale(${comboScale})`;
-        } else {
-          comboEl.classList.remove('visible');
-          comboEl.style.transform = '';
+        if (S.combo !== lastRender.combo) {
+          if (S.combo > 3) {
+            comboEl.textContent = S.combo + 'x';
+            comboEl.classList.add('visible');
+            const comboScale = 1 + Math.min(S.combo / 50, 0.5);
+            comboEl.style.transform = `scale(${comboScale})`;
+          } else {
+            comboEl.classList.remove('visible');
+            comboEl.style.transform = '';
+          }
+          lastRender.combo = S.combo;
         }
 
-        // Intensity bar
+        // Intensity bar + grid pulse (background scales slightly with intensity)
         const int = Math.min(S.log.length / CONFIG.INTENSITY_BAR_MAX_HITS, 1);
-        bar.style.width = (int * 100) + '%';
+        if (int !== lastRender.int) {
+          bar.style.width = (int * 100) + '%';
+          const gridScale = 1 + int * 0.02;
+          gridBg.style.transform = `scale(${gridScale})`;
+          gridBg.style.opacity = 0.3 + int * 0.4;
+          lastRender.int = int;
+        }
 
         // Intensity glow (scales with combo)
         const glowIntensity = Math.min(S.combo / 30, 0.6);
-        intensityGlow.style.opacity = glowIntensity;
-
-        // Grid pulse (background scales slightly with intensity)
-        const gridScale = 1 + int * 0.02;
-        gridBg.style.transform = `scale(${gridScale})`;
-        gridBg.style.opacity = 0.3 + int * 0.4;
-
-        // Color temperature shift (warm up accent as combo builds)
-        // This is handled via the intensity glow getting more prominent
+        if (glowIntensity !== lastRender.glow) {
+          intensityGlow.style.opacity = glowIntensity;
+          lastRender.glow = glowIntensity;
+        }
 
         // Stats
-        $('s-hits').textContent = S.hits;
-        $('s-dmg').textContent = S.dmg.toLocaleString();
+        if (S.hits !== lastRender.hits) {
+          $('s-hits').textContent = S.hits;
+          lastRender.hits = S.hits;
+        }
+        if (S.dmg !== lastRender.dmg) {
+          $('s-dmg').textContent = S.dmg.toLocaleString();
+          lastRender.dmg = S.dmg;
+        }
       }
 
       // ===========================================
@@ -3460,7 +3489,7 @@
         if (buttons.includes(e.target) || modalOverlay.contains(e.target) || gameOverOverlay.contains(e.target)) return;
         if (modalOverlay.classList.contains('show') || gameOverOverlay.classList.contains('show')) return;
         e.preventDefault();
-        for (const t of e.touches) smash(t.clientX, t.clientY);
+        for (const t of e.changedTouches) smash(t.clientX, t.clientY);
       }, { passive: false });
 
       document.addEventListener('keydown', e => {
